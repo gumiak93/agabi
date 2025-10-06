@@ -192,6 +192,15 @@ function subscribeNewsletter() {
   closeNewsletter();
 }
 
+// 🔹 MENU toggle na telefonach
+const menuToggle = document.getElementById('menuToggle');
+const navButtons = document.getElementById('navButtons');
+
+menuToggle.addEventListener('click', () => {
+  navButtons.style.display = navButtons.style.display === 'flex' ? 'none' : 'flex';
+});
+
+
 // 🔹 Pokaz banner jeśli nie podjęto decyzji
 window.addEventListener('load', ()=>{
   if(localStorage.getItem('cookiesAccepted') === null) {

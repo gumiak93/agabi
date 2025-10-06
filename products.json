@@ -1,0 +1,39 @@
+{
+  "candles": [
+    {
+      "name": "Świeca Róża",
+      "img": "images/swieczka1.jpg",
+      "desc": "Delikatny zapach róży – idealna do romantycznych wieczorów.",
+      "price": 28
+    },
+    {
+      "name": "Świeca Tulipan",
+      "img": "images/swieczka3.jpg",
+      "desc": "Słodki zapach tulipana, który rozświetli Twój pokój.",
+      "price": 27
+    }
+  ],
+  "bouquets": [
+    {
+      "name": "Bukiet Róż",
+      "img": "images/swiecabukiet2.jpg",
+      "desc": "Aromatyczny bukiet czerwonych róż – wspaniały prezent dla bliskich.",
+      "price": 40
+    },
+    {
+      "name": "Bukiet Tulipanów",
+      "img": "images/swieczka2.webp",
+      "desc": "Wiosenny zapach świeżych tulipanów, radość w każdym domu.",
+      "price": 38
+    }
+  ],
+  "promotions": [
+    {
+      "name": "Zestaw Róża + Bukiet",
+      "img1": "images/swieczka1.jpg",
+      "img2": "images/swiecabukiet2.jpg",
+      "desc": "Zestaw promocyjny -15% przy zakupie świecy i bukietu.",
+      "price": 57.8
+    }
+  ]
+}

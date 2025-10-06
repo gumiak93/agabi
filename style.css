@@ -1,0 +1,281 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  text-align: center;
+  background: #fffaf7;
+  color: #333;
+  position: relative;
+}
+
+/* 🔹 Home z GIF tłem i różowym overlay */
+.home-background {
+  position: relative;
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.home-background::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url('images/swieczka.gif') center/cover no-repeat;
+  z-index: 1;
+  filter: brightness(0.7);
+}
+
+.home-background::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255, 182, 185, 0.3); /* lekki różowy overlay */
+  z-index: 2;
+}
+
+.home-content {
+  position: relative;
+  z-index: 3;
+  color: #fff; /* albo ciemny tekst w zależności od kontrastu */
+}
+
+
+/* 🔹 Treść home nad tłem */
+.home-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* 🔹 Baner */
+.top-banner {
+  width: 100%;
+  background: #ffcccc;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  z-index: 15;
+}
+.banner-text {
+  display: inline-block;
+  animation: slide 20s linear infinite;
+  font-weight: bold;
+}
+.banner-gif {
+  height: 20px;
+  vertical-align: middle;
+  margin: 0 6px;
+}
+@keyframes slide {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* 🔹 Nagłówek */
+header {
+  background: #ffb6b9;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.logo { height: 70px; }
+nav button {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  margin: 0 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+nav button:hover { color: #fff0f0; transform: scale(1.05); }
+
+.cart-toggle {
+  background: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* 🔹 Sekcje */
+main section { padding: 30px; position: relative; z-index: 10; }
+.hidden { display: none; }
+
+/* 🔹 Kategorie produktów */
+.categories { margin-bottom: 20px; }
+.categories button {
+  margin: 5px;
+  background: #ffb6b9;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.categories button:hover { background: #ff9aa2; }
+
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+.product-card {
+  background: white;
+  border-radius: 15px;
+  width: 200px;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.product-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.product-card img { width: 100%; border-radius: 10px; }
+
+/* 🔹 Bestseller */
+.bestsellers-wrapper {
+  overflow: hidden;
+  width: 100%;
+  margin-top: 20px;
+}
+.bestsellers {
+  display: flex;
+  gap: 30px;
+  transform: translateX(0);
+  will-change: transform;
+}
+.bestseller-item {
+  flex: 0 0 250px;
+  background:white;
+  border-radius:15px;
+  padding:10px;
+  text-align:center;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+  position: relative;
+}
+.bestseller-item img {
+  width: 100%;
+  border-radius:10px;
+}
+.bestseller-label {
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:#ff5a5f;
+  color:white;
+  padding:2px 6px;
+  font-size:12px;
+  border-radius:5px;
+  font-weight:bold;
+}
+
+/* 🔹 Modal produktu */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 5000;
+}
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  width: 350px;
+  position: relative;
+}
+.modal-content img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+/* 🔹 Koszyk */
+.cart {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 300px;
+  max-width: 350px;
+  height: 90%;
+  background: white;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+  padding: 20px;
+  transition: right 0.4s ease;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.cart.active { right: 0; }
+.cart ul { list-style:none; padding:0; max-height:300px; overflow-y:auto; }
+.cart form { display:flex; flex-direction:column; margin-top:10px; gap:10px; }
+.cart label { display:flex; flex-direction:column; text-align:left; font-size:14px; }
+.cart input, .cart select { padding:5px; border-radius:5px; border:1px solid #ccc; }
+.cart button { padding:8px; border:none; background:#ff5a5f; color:white; border-radius:5px; cursor:pointer; }
+
+/* 🔹 Stopka zawsze na dole */
+footer {
+  background:#ffb6b9;
+  color:white;
+  padding:10px;
+  position: relative;
+  z-index: 20;
+}
+
+/* 🔹 Responsywność */
+@media(max-width:768px){
+  header { flex-direction: column; }
+  nav { margin-top:10px; }
+  .product-grid { flex-direction: column; align-items: center; }
+  .bestsellers { gap:15px; }
+  .cart { width:90%; max-width:none; }
+}
+
+/* 🔹 Cookie banner */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #ffb6b9;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  z-index: 4000;
+}
+.cookie-banner button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.cookie-banner button:hover { opacity: 0.8; }

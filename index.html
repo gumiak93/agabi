@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agabi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 🔹 Baner górny -->
+<div class="top-banner">
+  <span class="banner-text">
+    ZAMÓW DO 12 A WYŚLEMY JESZCZE DZISIAJ 
+    <img src="images/candlebaner.gif" class="banner-gif">
+    DARMOWA WYSYŁKA POWYŻEJ 250ZŁ 
+    <img src="images/candlebaner.gif" class="banner-gif">
+    ZRÓB PREZENT SOBIE I SWOIM BLISKIM 
+    <img src="images/candlebaner.gif" class="banner-gif">
+  </span>
+</div>
+
+<header>
+  <div class="logo-container">
+    <img src="images/logo.jpg" alt="Logo" class="logo">
+  </div>
+  <nav>
+    <button data-target="home">Strona główna</button>
+    <button data-target="about">O mnie</button>
+    <button data-target="products">Produkty</button>
+    <button data-target="contact">Kontakt</button>
+  </nav>
+  <button id="cartToggle" class="cart-toggle">🛒 (<span id="cartCount">0</span>)</button>
+</header>
+
+<main>
+  <!-- 🔹 Home z GIF tłem -->
+  <section id="home" class="home-background">
+    <div class="home-content">
+      <h2>Witaj!</h2>
+      <div class="bestsellers-wrapper">
+        <div id="bestsellers" class="bestsellers"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="hidden">
+    <h2>O mnie</h2>
+    <p>Tworzymy ręcznie robione świece oraz kompozycje zapachowe. Każdy produkt to połączenie pasji, estetyki i aromatu.</p>
+  </section>
+
+  <section id="products" class="hidden">
+    <h2>Nasze produkty</h2>
+    <div class="categories">
+      <button data-cat="candles">Świece</button>
+      <button data-cat="bouquets">Bukiety</button>
+      <button data-cat="promotions">Promocje</button>
+    </div>
+
+    <div id="candles" class="product-grid category hidden"></div>
+    <div id="bouquets" class="product-grid category hidden"></div>
+    <div id="promotions" class="product-grid category hidden"></div>
+  </section>
+
+  <section id="contact" class="hidden">
+    <h2>Kontakt</h2>
+    <p>Masz pytania? Skontaktuj się z nami!</p>
+    <p>📧 kontakt@agabi.pl</p>
+    <p>📞 +48 600 123 456</p>
+  </section>
+</main>
+
+<!-- 🔹 Stopka zawsze na dole -->
+<footer>
+  <p>&copy; 2025 Agabi – Ręcznie robione świece i bukiety</p>
+</footer>
+
+<!-- 🔸 Modal produktu -->
+<div id="productModal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2 id="modalTitle"></h2>
+    <img id="modalImage" alt="Produkt">
+    <p id="modalDesc"></p>
+    <p id="modalPrice"></p>
+    <label>Ilość: <input type="number" id="quantity" value="1" min="1"></label>
+    <button onclick="addToCart()">Dodaj do koszyka</button>
+  </div>
+</div>
+
+<!-- 🔸 Koszyk -->
+<div id="cart" class="cart hidden">
+  <div class="cart-header">
+    <h3>Twój koszyk</h3>
+    <button onclick="toggleCart()">✖</button>
+  </div>
+  <ul id="cartItems"><li>Twój koszyk jest pusty.</li></ul>
+  <p id="cartTotal">Łącznie: 0 zł</p>
+  <button onclick="showCheckoutForm()">Zamów</button>
+
+  <form id="cartForm" class="hidden">
+    <h4>Dane do zamówienia</h4>
+    <label>Imię i nazwisko:<input type="text" id="name"></label>
+    <label>Telefon:<input type="text" id="phone"></label>
+    <label>Email:<input type="email" id="email"></label>
+    <label>Adres dostawy:<input type="text" id="address"></label>
+    <label>Sposób płatności:
+      <select id="payment">
+        <option>Blik</option>
+        <option>PayU</option>
+        <option>Przelew tradycyjny</option>
+        <option>Płatność przy odbiorze</option>
+      </select>
+    </label>
+    <button type="button" onclick="checkout()">Wyślij zamówienie</button>
+  </form>
+</div>
+
+<!-- 🔹 Baner ciasteczek -->
+<div id="cookieBanner" class="cookie-banner">
+  Ta strona używa ciasteczek w celu poprawy działania i analizy. 
+  <button onclick="acceptCookies()">Akceptuję</button>
+  <button onclick="declineCookies()">Odrzuć</button>
+</div>
+
+<!-- 🔹 Newsletter -->
+<div id="newsletterPopup" class="modal hidden">
+  <div class="modal-content">
+    <span class="close" onclick="closeNewsletter()">&times;</span>
+    <h2>Zapisz się do newslettera!</h2>
+    <p>Otrzymuj informacje o nowościach i promocjach.</p>
+    <input type="email" id="newsletterEmail" placeholder="Twój email">
+    <button onclick="subscribeNewsletter()">Zapisz się</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

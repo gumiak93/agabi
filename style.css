@@ -33,20 +33,15 @@ body {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(255, 182, 185, 0.3); /* lekki różowy overlay */
+  background: rgba(255, 182, 185, 0.3);
   z-index: 2;
 }
 
 .home-content {
   position: relative;
   z-index: 3;
-  color: #fff; /* albo ciemny tekst w zależności od kontrastu */
-}
-
-/* 🔹 Treść home nad tłem */
-.home-content {
-  position: relative;
-  z-index: 10;
+  color: #fff;
+  text-align: center;
 }
 
 /* 🔹 Baner */
@@ -105,8 +100,13 @@ nav button:hover { color: #fff0f0; transform: scale(1.05); }
   background: #fff;
   border: none;
   padding: 5px 10px;
-  border-radius: 5px;
+  border-radius: 50%;
   cursor: pointer;
+  position: fixed;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  z-index: 5000;
 }
 
 /* 🔹 Sekcje */
@@ -151,16 +151,17 @@ main section { padding: 30px; position: relative; z-index: 10; }
 .bestsellers-wrapper {
   overflow: hidden;
   width: 100%;
-  margin-top: 20px;
+  margin: 20px 0;
+  padding: 0 20px;
 }
 .bestsellers {
   display: flex;
-  gap: 30px;
+  gap: 20px;
   transform: translateX(0);
   will-change: transform;
 }
 .bestseller-item {
-  flex: 0 0 250px;
+  flex: 0 0 180px;
   background:white;
   border-radius:15px;
   padding:10px;
@@ -171,6 +172,8 @@ main section { padding: 30px; position: relative; z-index: 10; }
 .bestseller-item img {
   width: 100%;
   border-radius:10px;
+  height: 150px;
+  object-fit: cover;
 }
 .bestseller-label {
   position:absolute;
@@ -183,6 +186,8 @@ main section { padding: 30px; position: relative; z-index: 10; }
   border-radius:5px;
   font-weight:bold;
 }
+.bestseller-name { margin-top: 8px; font-weight:bold; font-size:14px; }
+.bestseller-price { margin-top: 4px; font-size:13px; color:#333; }
 
 /* 🔹 Modal produktu */
 .modal {
@@ -227,7 +232,7 @@ main section { padding: 30px; position: relative; z-index: 10; }
   box-shadow: -2px 0 10px rgba(0,0,0,0.3);
   padding: 20px;
   transition: right 0.4s ease;
-  z-index: 3000;
+  z-index: 4000;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -246,15 +251,47 @@ footer {
   padding:10px;
   position: relative;
   z-index: 20;
+  text-align: center;
 }
 
-/* 🔹 Responsywność */
+/* 🔹 Responsywność dla telefonów */
 @media(max-width:768px){
-  header { flex-direction: column; }
-  nav { margin-top:10px; }
-  .product-grid { flex-direction: column; align-items: center; }
-  .bestsellers { gap:15px; }
-  .cart { width:90%; max-width:none; }
+  header { 
+    flex-direction: column;
+    align-items: center;
+    padding: 10px; 
+  }
+  nav { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    margin-top: 10px; 
+  }
+  nav button { font-size: 18px; padding: 10px; width: 100%; }
+  .logo { height: 50px; margin-bottom: 10px; }
+
+  .home-background { min-height: 60vh; }
+  .home-content { padding: 10px; font-size: 16px; }
+
+  .bestsellers-wrapper { overflow-x: scroll; padding: 0 10px; }
+  .bestsellers { gap: 15px; }
+  .bestseller-item { flex: 0 0 160px; }
+  .bestseller-item img { height: 120px; }
+
+  .product-grid { flex-direction: column; align-items: center; gap: 15px; }
+  .categories button { width: 90%; font-size: 16px; padding: 12px; }
+  .product-card { width: 90%; max-width: 300px; }
+
+  .modal-content { width: 90%; padding: 15px; }
+
+  /* Koszyk przyklejony po prawej */
+  .cart-toggle {
+    top: auto;
+    bottom: 20px;
+    transform: none;
+    border-radius: 50%;
+  }
+  .cart { width: 90%; right: -100%; max-width: none; }
 }
 
 /* 🔹 Cookie banner */

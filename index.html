@@ -34,21 +34,26 @@
 </header>
 
 <main>
-  <!-- 🔹 Home z GIF tłem -->
+  <!-- 🔹 Home -->
   <section id="home" class="home-background">
     <div class="home-content">
       <h2>Witaj!</h2>
-      <div class="bestsellers-wrapper">
-        <div id="bestsellers" class="bestsellers"></div>
-      </div>
+      <p>Ręcznie robione świece i bukiety.</p>
     </div>
   </section>
 
+  <!-- 🔹 Bestseller – tylko na stronie głównej -->
+  <div class="bestsellers-wrapper">
+    <div id="bestsellers" class="bestsellers"></div>
+  </div>
+
+  <!-- 🔹 O mnie -->
   <section id="about" class="hidden">
     <h2>O mnie</h2>
     <p>Tworzymy ręcznie robione świece oraz kompozycje zapachowe. Każdy produkt to połączenie pasji, estetyki i aromatu.</p>
   </section>
 
+  <!-- 🔹 Produkty -->
   <section id="products" class="hidden">
     <h2>Nasze produkty</h2>
     <div class="categories">
@@ -56,12 +61,12 @@
       <button data-cat="bouquets">Bukiety</button>
       <button data-cat="promotions">Promocje</button>
     </div>
-
     <div id="candles" class="product-grid category hidden"></div>
     <div id="bouquets" class="product-grid category hidden"></div>
     <div id="promotions" class="product-grid category hidden"></div>
   </section>
 
+  <!-- 🔹 Kontakt -->
   <section id="contact" class="hidden">
     <h2>Kontakt</h2>
     <p>Masz pytania? Skontaktuj się z nami!</p>
@@ -70,7 +75,7 @@
   </section>
 </main>
 
-<!-- 🔹 Stopka zawsze na dole -->
+<!-- 🔹 Stopka -->
 <footer>
   <p>&copy; 2025 Agabi – Ręcznie robione świece i bukiety</p>
 </footer>

@@ -135,12 +135,30 @@ function checkout(){
   document.getElementById('cartForm').reset();
 }
 
-// 🔹 Bestseller – płynny slider
+// 🔹 Bestseller – tylko na stronie głównej
+function loadBestsellers(){
+  const container = document.getElementById('bestsellers');
+  container.innerHTML='';
+  bestsellers.forEach(p=>{
+    const div = document.createElement('div');
+    div.className='bestseller-item';
+    div.innerHTML=`
+      <img src="${p.img}" alt="${p.name}">
+      <div class="bestseller-label">BESTSELLER</div>
+      <div class="bestseller-name">${p.name}</div>
+      <div class="bestseller-price">${p.price} zł</div>
+    `;
+    container.appendChild(div);
+  });
+  animateBestsellers();
+}
+
 let bsScroll=0;
 function animateBestsellers(){
   const bestsellersContainer=document.getElementById('bestsellers');
+  if(!bestsellersContainer) return;
   bsScroll-=0.3;
-  if(Math.abs(bsScroll)>=bestsellersContainer.scrollWidth/2) bsScroll=0;
+  if(Math.abs(bsScroll) >= bestsellersContainer.scrollWidth/2) bsScroll = 0;
   bestsellersContainer.style.transform=`translateX(${bsScroll}px)`;
   requestAnimationFrame(animateBestsellers);
 }

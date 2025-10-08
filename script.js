@@ -2,7 +2,6 @@
 const SUPABASE_URL = 'https://mkvpqnvlzdrujsqkdpmi.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1rdnBxbnZsemRydWpzcWtkcG1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk4NDc4MDcsImV4cCI6MjA3NTQyMzgwN30.QuCU__UgvzofofS-T5Y-XzdLW7EakZZzh4DwQP4xAnA';
 
-// 🔹 Poprawiona inicjalizacja Supabase z UMD
 const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // 🔹 Dane i koszyk
@@ -26,7 +25,6 @@ async function loadProductsFromSupabase() {
       if (cat === 'candles') productsData.candles.push(p);
       else if (cat === 'bouquets') productsData.bouquets.push(p);
       else if (cat === 'promotions') productsData.promotions.push(p);
-
       if (p.bestseller) bestsellers.push(p);
     });
 
@@ -55,7 +53,6 @@ function loadCategories() {
 function loadProducts(cat) {
   const container = document.getElementById(cat);
   if (!productsData[cat]) return;
-
   container.innerHTML = '';
   productsData[cat].forEach(p => {
     const div = document.createElement('div');
@@ -201,6 +198,5 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProductsFromSupabase();
   loadCategories();
   if (localStorage.getItem('cookiesAccepted') === null) document.getElementById('cookieBanner').style.display = 'block';
-
   document.getElementById('cartToggle').addEventListener('click', toggleCart);
 });

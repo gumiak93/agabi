@@ -24,7 +24,7 @@
   <div class="logo-container">
     <img src="images/logo.jpg" alt="Logo" class="logo">
   </div>
-  <button class="menu-toggle" onclick="toggleMenu()">MENU</button>
+  <button class="menu-toggle">MENU</button>
   <nav>
     <button data-target="home">Strona główna</button>
     <button data-target="about">O mnie</button>
@@ -75,26 +75,26 @@
   <p>&copy; 2025 Agabi – Ręcznie robione świece i bukiety</p>
 </footer>
 
-<div id="productModal" class="modal">
+<div id="productModal" class="modal hidden">
   <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
+    <span class="close">&times;</span>
     <h2 id="modalTitle"></h2>
     <img id="modalImage" alt="Produkt">
     <p id="modalDesc"></p>
     <p id="modalPrice"></p>
     <label>Ilość: <input type="number" id="quantity" value="1" min="1"></label>
-    <button onclick="addToCart()">Dodaj do koszyka</button>
+    <button id="addToCartBtn">Dodaj do koszyka</button>
   </div>
 </div>
 
 <div id="cart" class="cart">
   <div class="cart-header">
     <h3>Twój koszyk</h3>
-    <button onclick="toggleCart()">✖</button>
+    <button id="cartCloseBtn">✖</button>
   </div>
   <ul id="cartItems"><li>Twój koszyk jest pusty.</li></ul>
   <p id="cartTotal">Łącznie: 0 zł</p>
-  <button onclick="showCheckoutForm()">Zamów</button>
+  <button id="checkoutBtn">Zamów</button>
 
   <form id="cartForm" class="hidden">
     <h4>Dane do zamówienia</h4>
@@ -110,23 +110,23 @@
         <option>Płatność przy odbiorze</option>
       </select>
     </label>
-    <button type="button" onclick="checkout()">Wyślij zamówienie</button>
+    <button type="button" id="sendOrderBtn">Wyślij zamówienie</button>
   </form>
 </div>
 
-<div id="cookieBanner" class="cookie-banner">
+<div id="cookieBanner" class="cookie-banner hidden">
   Ta strona używa ciasteczek w celu poprawy działania i analizy. 
-  <button onclick="acceptCookies()">Akceptuję</button>
-  <button onclick="declineCookies()">Odrzuć</button>
+  <button id="acceptCookiesBtn">Akceptuję</button>
+  <button id="declineCookiesBtn">Odrzuć</button>
 </div>
 
 <div id="newsletterPopup" class="modal hidden">
   <div class="modal-content">
-    <span class="close" onclick="closeNewsletter()">&times;</span>
+    <span class="close">&times;</span>
     <h2>Zapisz się do newslettera!</h2>
     <p>Otrzymuj informacje o nowościach i promocjach.</p>
     <input type="email" id="newsletterEmail" placeholder="Twój email">
-    <button onclick="subscribeNewsletter()">Zapisz się</button>
+    <button id="subscribeNewsletterBtn">Zapisz się</button>
   </div>
 </div>
 

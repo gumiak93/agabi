@@ -75,10 +75,19 @@ function showProductDetail(p) {
   document.getElementById('modalDesc').textContent = p.description || '';
   document.getElementById('modalPrice').textContent = `Cena: ${formatPrice(p.price)} zł`;
   document.getElementById('quantity').value = 1;
-  document.getElementById('productModal').style.display = 'flex';
+  openModal('productModal');
 }
-function closeModal() {
-  document.getElementById('productModal').style.display = 'none';
+function closeModal() { closeModalById('productModal'); }
+
+function openModal(id) {
+  const modal = document.getElementById(id);
+  modal.classList.remove('hidden');
+  modal.style.display = 'flex';
+}
+function closeModalById(id) {
+  const modal = document.getElementById(id);
+  modal.classList.add('hidden');
+  modal.style.display = 'none';
 }
 
 // 🔹 Koszyk
@@ -158,9 +167,11 @@ function escapeHtml(text) {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-// 🔹 EmailJS - wysyłka zamówienia
-emailjs.init("7WfAAPMnAEYw40agp");
+// 🔹 Menu mobilne
+function toggleMenu() { document.querySelector('nav').classList.toggle('show'); }
 
+// 🔹 EmailJS
+emailjs.init("7WfAAPMnAEYw40agp");
 function checkout() {
   const name = document.getElementById('name').value;
   const phone = document.getElementById('phone').value;
@@ -192,11 +203,30 @@ function checkout() {
   });
 }
 
+// 🔹 Cookie banner
+function acceptCookies() { localStorage.setItem('cookiesAccepted', 'true'); closeCookieBanner(); }
+function declineCookies() { localStorage.setItem('cookiesAccepted', 'false'); closeCookieBanner(); }
+function closeCookieBanner() { document.getElementById('cookieBanner').classList.add('hidden'); }
+
+// 🔹 Newsletter
+function closeNewsletter() { closeModalById('newsletterPopup'); }
+function subscribeNewsletter() { 
+  alert("Dziękujemy za zapis!"); 
+  closeNewsletter();
+}
+
 // 🔹 Inicjalizacja
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById('home').classList.remove('hidden');
   loadProductsFromSupabase();
   loadCategories();
-  if (localStorage.getItem('cookiesAccepted') === null) document.getElementById('cookieBanner').style.display = 'block';
+  if (localStorage.getItem('cookiesAccepted') !== 'true') document.getElementById('cookieBanner').classList.remove('hidden');
   document.getElementById('cartToggle').addEventListener('click', toggleCart);
+  document.querySelectorAll('header nav button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
+      document.getElementById(btn.dataset.target).classList.remove('hidden');
+      if (document.querySelector('nav.show')) document.querySelector('nav').classList.remove('show');
+    });
+  });
 });

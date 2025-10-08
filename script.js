@@ -1,8 +1,8 @@
 // 🔹 Supabase
 const SUPABASE_URL = 'https://mkvpqnvlzdrujsqkdpmi.supabase.co';
-const SUPABASE_KEY = 'YOUR_SUPABASE_KEY';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1rdnBxbnZsemRydWpzcWtkcG1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk4NDc4MDcsImV4cCI6MjA3NTQyMzgwN30.QuCU__UgvzofofS-T5Y-XzdLW7EakZZzh4DwQP4xAnA';
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // 🔹 Dane i koszyk
 let productsData = { candles: [], bouquets: [], promotions: [] };

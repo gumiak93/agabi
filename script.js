@@ -2,7 +2,7 @@
 const SUPABASE_URL = 'https://mkvpqnvlzdrujsqkdpmi.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1rdnBxbnZsemRydWpzcWtkcG1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk4NDc4MDcsImV4cCI6MjA3NTQyMzgwN30.QuCU__UgvzofofS-T5Y-XzdLW7EakZZzh4DwQP4xAnA';
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let supabase;
 
 // 🔹 Dane i koszyk
 let productsData = { candles: [], bouquets: [], promotions: [] };
@@ -10,6 +10,18 @@ let bestsellers = [];
 let cart = [];
 let currentProduct = null;
 let cartVisible = false;
+
+// 🔹 Inicjalizacja po załadowaniu DOM
+document.addEventListener("DOMContentLoaded", () => {
+  // Supabase inicjalizacja
+  supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  document.getElementById('home').classList.remove('hidden');
+  loadProductsFromSupabase();
+  loadCategories();
+
+  if (localStorage.getItem('cookiesAccepted') === 'true') document.getElementById('cookieBanner').style.display = 'none';
+});
 
 // 🔹 Pobranie produktów
 async function loadProductsFromSupabase() {
@@ -116,10 +128,8 @@ function updateCart() {
 function removeFromCart(id) { cart = cart.filter(i => i.id !== id); updateCart(); }
 
 function toggleCart() {
-  const cartEl = document.getElementById('cart');
   cartVisible = !cartVisible;
-  cartEl.classList.toggle('active', cartVisible);
-  if (!cartVisible) cartEl.classList.remove('active');
+  document.getElementById('cart').classList.toggle('active', cartVisible);
 }
 
 function openCart() {
@@ -210,11 +220,3 @@ function toggleMenu() {
 // 🔹 Newsletter
 function closeNewsletter() { document.getElementById('newsletterPopup').classList.add('hidden'); }
 function subscribeNewsletter() { alert('Zapisano do newslettera!'); document.getElementById('newsletterPopup').classList.add('hidden'); }
-
-// 🔹 Inicjalizacja
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById('home').classList.remove('hidden');
-  loadProductsFromSupabase();
-  loadCategories();
-  if (localStorage.getItem('cookiesAccepted') === 'true') document.getElementById('cookieBanner').style.display = 'none';
-});

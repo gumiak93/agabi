@@ -14,7 +14,8 @@ let cartVisible = false;
 // 🔹 Inicjalizacja po załadowaniu DOM
 document.addEventListener("DOMContentLoaded", () => {
   // Supabase inicjalizacja
-  supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
+  supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 
   document.getElementById('home').classList.remove('hidden');
   loadProductsFromSupabase();

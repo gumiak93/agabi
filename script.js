@@ -13,13 +13,37 @@ let cartVisible = false;
 
 // 🔹 Inicjalizacja po załadowaniu DOM
 document.addEventListener("DOMContentLoaded", () => {
+  // Supabase
   supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  // Strona główna
   document.getElementById('home').classList.remove('hidden');
+
   loadProductsFromSupabase();
   loadCategories();
 
-  if (localStorage.getItem('cookiesAccepted') === 'true') document.getElementById('cookieBanner').style.display = 'none';
+  // Cookie banner
+  if (localStorage.getItem('cookiesAccepted') === 'true') {
+    document.getElementById('cookieBanner').style.display = 'none';
+  }
+
+  // Newsletter: domyślnie ukryty, pokazujemy tylko jeśli użytkownik nie zamknął
+  const newsletter = document.getElementById('newsletterPopup');
+  if (!localStorage.getItem('newsletterClosed')) {
+    newsletter.classList.remove('hidden');
+  }
+
+  // Przycisk koszyka
+  document.getElementById('cartToggle').addEventListener('click', toggleCart);
+
+  // Nawigacja
+  document.querySelectorAll('header nav button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
+      document.getElementById(btn.dataset.target).classList.remove('hidden');
+      document.querySelector('nav.show')?.classList.remove('show');
+    });
+  });
 });
 
 // 🔹 Pobranie produktów
@@ -209,5 +233,12 @@ function declineCookies() { localStorage.setItem('cookiesAccepted', 'false'); do
 function toggleMenu() { document.querySelector('nav').classList.toggle('show'); }
 
 // 🔹 Newsletter
-function closeNewsletter() { document.getElementById('newsletterPopup').classList.add('hidden'); }
-function subscribeNewsletter() { alert('Zapisano do newslettera!'); document.getElementById('newsletterPopup').classList.add('hidden'); }
+function closeNewsletter() {
+  document.getElementById('newsletterPopup').classList.add('hidden');
+  localStorage.setItem('newsletterClosed', 'true');
+}
+
+function subscribeNewsletter() {
+  alert('Zapisano do newslettera!');
+  closeNewsletter();
+}

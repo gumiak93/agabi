@@ -75,7 +75,8 @@
   <p>&copy; 2025 Agabi – Ręcznie robione świece i bukiety</p>
 </footer>
 
-<div id="productModal" class="modal">
+<!-- 🔹 Modal produktu -->
+<div id="productModal" class="modal hidden">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">&times;</span>
     <h2 id="modalTitle"></h2>
@@ -87,7 +88,8 @@
   </div>
 </div>
 
-<div id="cart" class="cart">
+<!-- 🔹 Koszyk -->
+<div id="cart" class="cart hidden">
   <div class="cart-header">
     <h3>Twój koszyk</h3>
     <button onclick="toggleCart()">✖</button>
@@ -114,12 +116,14 @@
   </form>
 </div>
 
+<!-- 🔹 Cookie banner -->
 <div id="cookieBanner" class="cookie-banner">
   Ta strona używa ciasteczek w celu poprawy działania i analizy. 
   <button onclick="acceptCookies()">Akceptuję</button>
   <button onclick="declineCookies()">Odrzuć</button>
 </div>
 
+<!-- 🔹 Newsletter -->
 <div id="newsletterPopup" class="modal hidden">
   <div class="modal-content">
     <span class="close" onclick="closeNewsletter()">&times;</span>

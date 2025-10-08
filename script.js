@@ -1,8 +1,7 @@
 // 🔹 Supabase
 const SUPABASE_URL = 'https://mkvpqnvlzdrujsqkdpmi.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1rdnBxbnZsemRydWpzcWtkcG1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk4NDc4MDcsImV4cCI6MjA3NTQyMzgwN30.QuCU__UgvzofofS-T5Y-XzdLW7EakZZzh4DwQP4xAnA';
-
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_KEY = 'YOUR_SUPABASE_KEY_HERE';
+const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // 🔹 Dane i koszyk
 let productsData = { candles: [], bouquets: [], promotions: [] };
@@ -41,15 +40,15 @@ async function loadProductsFromSupabase() {
 function loadCategories() {
   const buttons = document.querySelectorAll('.categories button');
   buttons.forEach(btn => {
-    btn.onclick = () => {
+    btn.addEventListener('click', () => {
       document.querySelectorAll('.category').forEach(c => c.classList.add('hidden'));
       const cat = btn.dataset.cat;
       document.getElementById(cat).classList.remove('hidden');
-    };
+    });
   });
 }
 
-// 🔹 Wstawianie produktów
+// 🔹 Produkty
 function loadProducts(cat) {
   const container = document.getElementById(cat);
   if (!productsData[cat]) return;
@@ -62,12 +61,13 @@ function loadProducts(cat) {
       <h3>${escapeHtml(p.name)}</h3>
       <p>${formatPrice(p.price)} zł</p>
     `;
-    div.onclick = () => showProductDetail(p);
+    div.addEventListener('click', () => showProductDetail(p));
     container.appendChild(div);
   });
 }
 
 // 🔹 Modal
+const productModal = document.getElementById('productModal');
 function showProductDetail(p) {
   currentProduct = p;
   document.getElementById('modalTitle').textContent = p.name;
@@ -75,19 +75,10 @@ function showProductDetail(p) {
   document.getElementById('modalDesc').textContent = p.description || '';
   document.getElementById('modalPrice').textContent = `Cena: ${formatPrice(p.price)} zł`;
   document.getElementById('quantity').value = 1;
-  openModal('productModal');
+  productModal.classList.remove('hidden');
 }
-function closeModal() { closeModalById('productModal'); }
-
-function openModal(id) {
-  const modal = document.getElementById(id);
-  modal.classList.remove('hidden');
-  modal.style.display = 'flex';
-}
-function closeModalById(id) {
-  const modal = document.getElementById(id);
-  modal.classList.add('hidden');
-  modal.style.display = 'none';
+function closeModal() {
+  productModal.classList.add('hidden');
 }
 
 // 🔹 Koszyk
@@ -125,15 +116,15 @@ function updateCart() {
 }
 
 function removeFromCart(id) { cart = cart.filter(i => i.id !== id); updateCart(); }
+
+const cartEl = document.getElementById('cart');
 function toggleCart() {
-  const cartEl = document.getElementById('cart');
   cartVisible = !cartVisible;
   cartEl.classList.toggle('active', cartVisible);
-  if (cartVisible) cartEl.classList.remove('hidden');
-  else setTimeout(() => cartEl.classList.add('hidden'), 400);
+  if (!cartVisible) setTimeout(() => cartEl.classList.add('hidden'), 400);
+  else cartEl.classList.remove('hidden');
 }
 function openCart() {
-  const cartEl = document.getElementById('cart');
   cartEl.classList.remove('hidden');
   cartEl.classList.add('active');
   cartVisible = true;
@@ -167,11 +158,9 @@ function escapeHtml(text) {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-// 🔹 Menu mobilne
-function toggleMenu() { document.querySelector('nav').classList.toggle('show'); }
-
 // 🔹 EmailJS
 emailjs.init("7WfAAPMnAEYw40agp");
+
 function checkout() {
   const name = document.getElementById('name').value;
   const phone = document.getElementById('phone').value;
@@ -203,30 +192,34 @@ function checkout() {
   });
 }
 
-// 🔹 Cookie banner
-function acceptCookies() { localStorage.setItem('cookiesAccepted', 'true'); closeCookieBanner(); }
-function declineCookies() { localStorage.setItem('cookiesAccepted', 'false'); closeCookieBanner(); }
-function closeCookieBanner() { document.getElementById('cookieBanner').classList.add('hidden'); }
-
-// 🔹 Newsletter
-function closeNewsletter() { closeModalById('newsletterPopup'); }
-function subscribeNewsletter() { 
-  alert("Dziękujemy za zapis!"); 
-  closeNewsletter();
+// 🔹 Cookie Banner
+function acceptCookies() {
+  localStorage.setItem('cookiesAccepted', 'true');
+  document.getElementById('cookieBanner').classList.add('hidden');
+}
+function declineCookies() {
+  localStorage.setItem('cookiesAccepted', 'false');
+  document.getElementById('cookieBanner').classList.add('hidden');
 }
 
-// 🔹 Inicjalizacja
+// 🔹 Menu mobilne
+const menuToggle = document.querySelector('.menu-toggle');
+const nav = document.querySelector('nav');
+menuToggle.addEventListener('click', () => nav.classList.toggle('show'));
+
+// 🔹 Inicjalizacja po załadowaniu DOM
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById('home').classList.remove('hidden');
+
+  // Supabase
   loadProductsFromSupabase();
   loadCategories();
-  if (localStorage.getItem('cookiesAccepted') !== 'true') document.getElementById('cookieBanner').classList.remove('hidden');
+
+  // Koszyk
   document.getElementById('cartToggle').addEventListener('click', toggleCart);
-  document.querySelectorAll('header nav button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
-      document.getElementById(btn.dataset.target).classList.remove('hidden');
-      if (document.querySelector('nav.show')) document.querySelector('nav').classList.remove('show');
-    });
-  });
+
+  // Cookie Banner
+  if (localStorage.getItem('cookiesAccepted') === null) {
+    document.getElementById('cookieBanner').classList.remove('hidden');
+  }
 });

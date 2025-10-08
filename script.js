@@ -13,35 +13,29 @@ let cartVisible = false;
 
 // 🔹 Inicjalizacja po załadowaniu DOM
 document.addEventListener("DOMContentLoaded", () => {
-  // Supabase
   supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // Strona główna
   document.getElementById('home').classList.remove('hidden');
-
   loadProductsFromSupabase();
   loadCategories();
 
-  // Cookie banner
+  // 🔹 Cookie banner
   if (localStorage.getItem('cookiesAccepted') === 'true') {
     document.getElementById('cookieBanner').style.display = 'none';
   }
 
-  // Newsletter: domyślnie ukryty, pokazujemy tylko jeśli użytkownik nie zamknął
-  const newsletter = document.getElementById('newsletterPopup');
-  if (!localStorage.getItem('newsletterClosed')) {
-    newsletter.classList.remove('hidden');
+  // 🔹 Newsletter: pokaż tylko jeśli nie zamknięto wcześniej
+  if (localStorage.getItem('newsletterClosed') !== 'true') {
+    document.getElementById('newsletterPopup').classList.remove('hidden');
   }
 
-  // Przycisk koszyka
   document.getElementById('cartToggle').addEventListener('click', toggleCart);
 
-  // Nawigacja
   document.querySelectorAll('header nav button').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
       document.getElementById(btn.dataset.target).classList.remove('hidden');
-      document.querySelector('nav.show')?.classList.remove('show');
+      if (document.querySelector('nav.show')) document.querySelector('nav').classList.remove('show');
     });
   });
 });
@@ -74,12 +68,10 @@ async function loadProductsFromSupabase() {
 
 // 🔹 Kategorie
 function loadCategories() {
-  const buttons = document.querySelectorAll('.categories button');
-  buttons.forEach(btn => {
+  document.querySelectorAll('.categories button').forEach(btn => {
     btn.onclick = () => {
       document.querySelectorAll('.category').forEach(c => c.classList.add('hidden'));
-      const cat = btn.dataset.cat;
-      document.getElementById(cat).classList.remove('hidden');
+      document.getElementById(btn.dataset.cat).classList.remove('hidden');
     };
   });
 }
@@ -110,9 +102,9 @@ function showProductDetail(p) {
   document.getElementById('modalDesc').textContent = p.description || '';
   document.getElementById('modalPrice').textContent = `Cena: ${formatPrice(p.price)} zł`;
   document.getElementById('quantity').value = 1;
-  document.getElementById('productModal').style.display = 'flex';
+  document.getElementById('productModal').classList.remove('hidden');
 }
-function closeModal() { document.getElementById('productModal').style.display = 'none'; }
+function closeModal() { document.getElementById('productModal').classList.add('hidden'); }
 
 // 🔹 Koszyk
 function addToCart() {
@@ -237,8 +229,9 @@ function closeNewsletter() {
   document.getElementById('newsletterPopup').classList.add('hidden');
   localStorage.setItem('newsletterClosed', 'true');
 }
-
 function subscribeNewsletter() {
+  const email = document.getElementById('newsletterEmail').value;
+  if (!email) { alert("Podaj email!"); return; }
   alert('Zapisano do newslettera!');
   closeNewsletter();
 }

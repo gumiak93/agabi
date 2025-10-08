@@ -13,9 +13,7 @@ let cartVisible = false;
 
 // 🔹 Inicjalizacja po załadowaniu DOM
 document.addEventListener("DOMContentLoaded", () => {
-  // Supabase inicjalizacja
-  supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   document.getElementById('home').classList.remove('hidden');
   loadProductsFromSupabase();
@@ -204,19 +202,11 @@ function checkout() {
 }
 
 // 🔹 Cookie banner
-function acceptCookies() {
-  localStorage.setItem('cookiesAccepted', 'true');
-  document.getElementById('cookieBanner').style.display = 'none';
-}
-function declineCookies() {
-  localStorage.setItem('cookiesAccepted', 'false');
-  document.getElementById('cookieBanner').style.display = 'none';
-}
+function acceptCookies() { localStorage.setItem('cookiesAccepted', 'true'); document.getElementById('cookieBanner').style.display = 'none'; }
+function declineCookies() { localStorage.setItem('cookiesAccepted', 'false'); document.getElementById('cookieBanner').style.display = 'none'; }
 
 // 🔹 Menu mobilne
-function toggleMenu() {
-  document.querySelector('nav').classList.toggle('show');
-}
+function toggleMenu() { document.querySelector('nav').classList.toggle('show'); }
 
 // 🔹 Newsletter
 function closeNewsletter() { document.getElementById('newsletterPopup').classList.add('hidden'); }

@@ -19,12 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProductsFromSupabase();
   loadCategories();
 
-  // 🔹 Cookie banner
+  // Cookie banner
   if (localStorage.getItem('cookiesAccepted') === 'true') {
     document.getElementById('cookieBanner').style.display = 'none';
   }
 
-  // 🔹 Newsletter: pokaż tylko jeśli nie zamknięto wcześniej
+  // Newsletter
   if (localStorage.getItem('newsletterClosed') !== 'true') {
     document.getElementById('newsletterPopup').classList.remove('hidden');
   }
@@ -68,10 +68,12 @@ async function loadProductsFromSupabase() {
 
 // 🔹 Kategorie
 function loadCategories() {
-  document.querySelectorAll('.categories button').forEach(btn => {
+  const buttons = document.querySelectorAll('.categories button');
+  buttons.forEach(btn => {
     btn.onclick = () => {
       document.querySelectorAll('.category').forEach(c => c.classList.add('hidden'));
-      document.getElementById(btn.dataset.cat).classList.remove('hidden');
+      const cat = btn.dataset.cat;
+      document.getElementById(cat).classList.remove('hidden');
     };
   });
 }
@@ -102,9 +104,9 @@ function showProductDetail(p) {
   document.getElementById('modalDesc').textContent = p.description || '';
   document.getElementById('modalPrice').textContent = `Cena: ${formatPrice(p.price)} zł`;
   document.getElementById('quantity').value = 1;
-  document.getElementById('productModal').classList.remove('hidden');
+  document.getElementById('productModal').style.display = 'flex';
 }
-function closeModal() { document.getElementById('productModal').classList.add('hidden'); }
+function closeModal() { document.getElementById('productModal').style.display = 'none'; }
 
 // 🔹 Koszyk
 function addToCart() {
@@ -225,13 +227,12 @@ function declineCookies() { localStorage.setItem('cookiesAccepted', 'false'); do
 function toggleMenu() { document.querySelector('nav').classList.toggle('show'); }
 
 // 🔹 Newsletter
-function closeNewsletter() {
-  document.getElementById('newsletterPopup').classList.add('hidden');
-  localStorage.setItem('newsletterClosed', 'true');
+function closeNewsletter() { 
+  localStorage.setItem('newsletterClosed', 'true'); 
+  document.getElementById('newsletterPopup').classList.add('hidden'); 
 }
-function subscribeNewsletter() {
-  const email = document.getElementById('newsletterEmail').value;
-  if (!email) { alert("Podaj email!"); return; }
-  alert('Zapisano do newslettera!');
-  closeNewsletter();
+function subscribeNewsletter() { 
+  alert('Zapisano do newslettera!'); 
+  localStorage.setItem('newsletterClosed', 'true');
+  document.getElementById('newsletterPopup').classList.add('hidden'); 
 }

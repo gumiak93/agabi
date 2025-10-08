@@ -12,11 +12,11 @@
 <div class="top-banner">
   <span class="banner-text">
     ZAMÓW DO 12 A WYŚLEMY JESZCZE DZISIAJ 
-    <img src="images/candlebaner.gif" class="banner-gif">
+    <img src="images/candlebaner.gif" class="banner-gif" alt="">
     DARMOWA WYSYŁKA POWYŻEJ 250ZŁ 
-    <img src="images/candlebaner.gif" class="banner-gif">
+    <img src="images/candlebaner.gif" class="banner-gif" alt="">
     ZRÓB PREZENT SOBIE I SWOIM BLISKIM 
-    <img src="images/candlebaner.gif" class="banner-gif">
+    <img src="images/candlebaner.gif" class="banner-gif" alt="">
   </span>
 </div>
 
@@ -43,7 +43,7 @@
     </div>
   </section>
 
-  <!-- 🔹 Bestseller – tylko na stronie głównej -->
+  <!-- 🔹 Bestseller -->
   <div class="bestsellers-wrapper">
     <div id="bestsellers" class="bestsellers"></div>
   </div>
@@ -82,7 +82,7 @@
 </footer>
 
 <!-- 🔸 Modal produktu -->
-<div id="productModal" class="modal hidden">
+<div id="productModal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">&times;</span>
     <h2 id="modalTitle"></h2>
@@ -95,7 +95,7 @@
 </div>
 
 <!-- 🔸 Koszyk -->
-<div id="cart" class="cart hidden">
+<div id="cart" class="cart">
   <div class="cart-header">
     <h3>Twój koszyk</h3>
     <button onclick="toggleCart()">✖</button>
@@ -122,7 +122,7 @@
   </form>
 </div>
 
-<!-- 🔹 Baner ciasteczek -->
+<!-- 🔹 Cookie banner -->
 <div id="cookieBanner" class="cookie-banner">
   Ta strona używa ciasteczek w celu poprawy działania i analizy. 
   <button onclick="acceptCookies()">Akceptuję</button>
@@ -140,6 +140,10 @@
   </div>
 </div>
 
+<!-- 🔹 Supabase i EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="script.js"></script>
+
 </body>
 </html>

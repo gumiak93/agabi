@@ -175,7 +175,7 @@ function addToCart() {
 }
 
 function removeFromCart(id) {
-  const numericId = Number(id); // upewniamy się, że id jest liczbą
+  const numericId = Number(id);
   cart = cart.filter(item => item.id !== numericId);
   updateCart();
 }
@@ -195,22 +195,24 @@ function updateCart() {
       img.src = item.image || item.image2 || 'images/placeholder.jpg';
       img.alt = item.name || 'Produkt';
 
-      // 🔹 Nazwa i cena
+      // 🔹 Nazwa
       const textSpan = document.createElement('span');
       textSpan.textContent = `${item.name} x`;
 
-      // 🔹 Pole zmiany ilości
+      // 🔹 Ilość
       const qtyInput = document.createElement('input');
       qtyInput.type = 'number';
       qtyInput.min = 1;
       qtyInput.value = item.quantity;
-      qtyInput.style.width = '40px';
+      qtyInput.style.width = '50px';
+      qtyInput.style.flexShrink = '0';
       qtyInput.addEventListener('change', () => {
         const newQty = parseInt(qtyInput.value) || 1;
         item.quantity = newQty;
         updateCart();
       });
 
+      // 🔹 Cena
       const priceSpan = document.createElement('span');
       priceSpan.textContent = ` - ${formatPrice(Number(item.price || 0) * item.quantity)} zł `;
 
@@ -220,7 +222,7 @@ function updateCart() {
       removeBtn.className = 'remove-btn';
       removeBtn.addEventListener('click', () => removeFromCart(item.id));
 
-      // 🔹 Składanie elementów w li
+      // 🔹 Składanie elementów
       li.appendChild(img);
       li.appendChild(textSpan);
       li.appendChild(qtyInput);
@@ -235,9 +237,6 @@ function updateCart() {
   document.getElementById('cartTotal').textContent = `Łącznie: ${formatPrice(total)} zł`;
   document.getElementById('cartCount').textContent = cart.reduce((a,b)=>a+(b.quantity||0),0);
 }
-
-
-
 
 function toggleCart() { 
   cartVisible = !cartVisible; 
@@ -335,10 +334,8 @@ function declineCookies() {
 }
 
 // -----------------------------
-// script.js - dodano marquee bestsellerów
+// Bestsellery + animacje
 // -----------------------------
-
-// 🔹 Bestsellery
 function loadBestsellers() {
   const container = document.getElementById('bestsellers');
   container.innerHTML = '';
@@ -370,19 +367,6 @@ function revealOnScroll() {
 window.addEventListener('scroll', revealOnScroll);
 window.addEventListener('load', revealOnScroll);
 
-
-// -----------------------------
-// Animacje przy scrollu
-// -----------------------------
-function revealOnScroll() {
-  const elements = document.querySelectorAll('.product-card, .bestseller-item');
-  const windowHeight = window.innerHeight;
-  elements.forEach(el => {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < windowHeight - 100) el.classList.add('visible');
-  });
-}
-
 // -----------------------------
 // Pomocnicze
 // -----------------------------
@@ -390,20 +374,3 @@ function formatPrice(num) { const n = Number(num || 0); return n.toFixed(2); }
 function escapeHtml(text){ if (text===null||text===undefined) return ''; return String(text).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[m]); }
 function toggleMenu(){ const nav = document.querySelector('nav'); nav.classList.toggle('show'); const expanded = nav.classList.contains('show'); document.querySelector('.menu-toggle').setAttribute('aria-expanded', String(expanded)); }
 function validateEmail(email) { const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; return re.test(email); }
-
-// 🔹 Animacja elementów przy scrollu (produkty i bestsellery)
-function revealOnScroll() {
-  const elements = document.querySelectorAll('.product-card, .bestseller-item');
-  const windowHeight = window.innerHeight;
-
-  elements.forEach(el => {
-    const elementTop = el.getBoundingClientRect().top;
-    if (elementTop < windowHeight - 100) { // 100px przed osiągnięciem do widoku
-      el.classList.add('visible');
-    }
-  });
-}
-
-// wywołanie przy scrollu i od razu po załadowaniu
-window.addEventListener('scroll', revealOnScroll);
-window.addEventListener('load', revealOnScroll);

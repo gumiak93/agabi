@@ -133,9 +133,15 @@ footer { background:#ffb6b9; color:white; padding:10px; text-align:center; }
 @media(max-width:768px){
   nav { display:none; flex-direction:column; gap:10px; margin-top:10px; }
   nav.show { display:flex; position:absolute; top:50px; right:10px; background:#ffb6b9; border-radius:10px; padding:10px; z-index:1001; }
-  .menu-toggle { display:block; position:fixed; top:15px; right:10px; background:#ffb6b9; color:white; border:none; padding:8px 12px; border-radius:5px; font-weight:bold; cursor:pointer; z-index:2000; }
+  
+  /* MENU przyklejone do headera */
+  .menu-toggle { display:block; position:sticky; top:10px; right:10px; background:#ffb6b9; color:white; border:none; padding:8px 12px; border-radius:5px; font-weight:bold; cursor:pointer; z-index:2000; }
+
   .logo { height:50px; }
-  .cart-toggle { margin-top:5px; font-size:18px; padding:8px 12px; }
+  
+  /* Koszyk przyklejony do prawej krawędzi ekranu */
+  .cart-toggle { position:fixed; top:15px; right:10px; font-size:18px; padding:8px 12px; z-index:2001; }
+
   .home-background { min-height:60vh; }
   .home-content { padding:10px; font-size:16px; }
   .bestseller-item { flex:0 0 160px; }

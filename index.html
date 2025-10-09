@@ -4,38 +4,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agabi</title>
+  <meta name="description" content="Agabi — ręcznie robione świece i bukiety. Sklep z autorskimi świecami i kompozycjami zapachowymi.">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- 🔹 Baner górny -->
-<div class="top-banner">
+<div class="top-banner" role="region" aria-label="Informacje promocyjne">
   <span class="banner-text">
     ZAMÓW DO 12 A WYŚLEMY JESZCZE DZISIAJ 
-    <img src="images/candlebaner.gif" class="banner-gif" alt="">
+    <img src="images/candlebaner.gif" class="banner-gif" alt="animacja świecy">
     DARMOWA WYSYŁKA POWYŻEJ 250ZŁ 
-    <img src="images/candlebaner.gif" class="banner-gif" alt="">
+    <img src="images/candlebaner.gif" class="banner-gif" alt="animacja świecy">
     ZRÓB PREZENT SOBIE I SWOIM BLISKIM 
-    <img src="images/candlebaner.gif" class="banner-gif" alt="">
+    <img src="images/candlebaner.gif" class="banner-gif" alt="animacja świecy">
   </span>
 </div>
 
 <header>
   <div class="logo-container">
-    <img src="images/logo.jpg" alt="Logo" class="logo">
+    <img src="images/logo.jpg" alt="Agabi - logo" class="logo">
   </div>
-  <button class="menu-toggle" onclick="toggleMenu()">MENU</button>
-  <nav>
+  <button class="menu-toggle" onclick="toggleMenu()" aria-expanded="false" aria-controls="main-nav">MENU</button>
+  <nav id="main-nav" role="navigation">
     <button data-target="home">Strona główna</button>
     <button data-target="about">O mnie</button>
     <button data-target="products">Produkty</button>
     <button data-target="contact">Kontakt</button>
   </nav>
-  <button id="cartToggle" class="cart-toggle">🛒 (<span id="cartCount">0</span>)</button>
+  <button id="cartToggle" class="cart-toggle" aria-label="Pokaż koszyk">🛒 (<span id="cartCount">0</span>)</button>
 </header>
 
 <main>
-  <section id="home" class="home-background">
+  <section id="home" class="home-background" aria-label="Sekcja powitalna">
     <div class="home-content">
       <h2>Witaj!</h2>
       <p>Ręcznie robione świece i bukiety.</p>
@@ -43,31 +45,31 @@
   </section>
 
   <div class="bestsellers-wrapper">
-    <div id="bestsellers" class="bestsellers"></div>
+    <div id="bestsellers" class="bestsellers" aria-live="polite"></div>
   </div>
 
-  <section id="about" class="hidden">
+  <section id="about" class="hidden" aria-label="O mnie">
     <h2>O mnie</h2>
     <p>Tworzymy ręcznie robione świece oraz kompozycje zapachowe. Każdy produkt to połączenie pasji, estetyki i aromatu.</p>
   </section>
 
-  <section id="products" class="hidden">
+  <section id="products" class="hidden" aria-label="Produkty">
     <h2>Nasze produkty</h2>
     <div class="categories">
       <button data-cat="candles">Świece</button>
       <button data-cat="bouquets">Bukiety</button>
       <button data-cat="promotions">Promocje</button>
     </div>
-    <div id="candles" class="product-grid category hidden"></div>
-    <div id="bouquets" class="product-grid category hidden"></div>
-    <div id="promotions" class="product-grid category hidden"></div>
+    <div id="candles" class="product-grid category hidden" aria-live="polite"></div>
+    <div id="bouquets" class="product-grid category hidden" aria-live="polite"></div>
+    <div id="promotions" class="product-grid category hidden" aria-live="polite"></div>
   </section>
 
-  <section id="contact" class="hidden">
+  <section id="contact" class="hidden" aria-label="Kontakt">
     <h2>Kontakt</h2>
     <p>Masz pytania? Skontaktuj się z nami!</p>
-    <p>📧 kontakt@agabi.pl</p>
-    <p>📞 +48 600 123 456</p>
+    <p>📧 <a href="mailto:kontakt@agabi.pl">kontakt@agabi.pl</a></p>
+    <p>📞 <a href="tel:+48600123456">+48 600 123 456</a></p>
   </section>
 </main>
 
@@ -76,60 +78,69 @@
 </footer>
 
 <!-- 🔹 Modal produktu -->
-<div id="productModal" class="modal hidden">
+<div id="productModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
+    <button class="close" onclick="closeModal()" aria-label="Zamknij modal">&times;</button>
     <h2 id="modalTitle"></h2>
     <img id="modalImage" alt="Produkt">
     <p id="modalDesc"></p>
     <p id="modalPrice"></p>
-    <label>Ilość: <input type="number" id="quantity" value="1" min="1"></label>
+    <label>Ilość: <input type="number" id="quantity" value="1" min="1" aria-label="Ilość"></label>
     <button onclick="addToCart()">Dodaj do koszyka</button>
   </div>
 </div>
 
 <!-- 🔹 Koszyk -->
-<div id="cart" class="cart hidden">
+<div id="cart" class="cart hidden" aria-label="Koszyk">
   <div class="cart-header">
     <h3>Twój koszyk</h3>
-    <button onclick="toggleCart()">✖</button>
+    <button onclick="toggleCart()" aria-label="Zamknij koszyk">✖</button>
   </div>
   <ul id="cartItems"><li>Twój koszyk jest pusty.</li></ul>
   <p id="cartTotal">Łącznie: 0 zł</p>
   <button onclick="showCheckoutForm()">Zamów</button>
 
-  <form id="cartForm" class="hidden">
+  <form id="cartForm" class="hidden" onsubmit="return false" novalidate>
     <h4>Dane do zamówienia</h4>
-    <label>Imię i nazwisko:<input type="text" id="name"></label>
-    <label>Telefon:<input type="text" id="phone"></label>
-    <label>Email:<input type="email" id="email"></label>
-    <label>Adres dostawy:<input type="text" id="address"></label>
+    <label>Imię i nazwisko:
+      <input type="text" id="name" required placeholder="Jan Kowalski" aria-required="true">
+    </label>
+    <label>Telefon:
+      <input type="tel" id="phone" required placeholder="+48 600 123 456" pattern="^\+?\d[\d\s-]{6,}$" aria-required="true">
+    </label>
+    <label>Email:
+      <input type="email" id="email" required placeholder="email@domena.pl" aria-required="true">
+    </label>
+    <label>Adres dostawy:
+      <input type="text" id="address" required placeholder="Ulica 1, 00-000 Miasto" aria-required="true">
+    </label>
     <label>Sposób płatności:
-      <select id="payment">
+      <select id="payment" aria-label="Sposób płatności">
         <option>Blik</option>
         <option>PayU</option>
         <option>Przelew tradycyjny</option>
         <option>Płatność przy odbiorze</option>
       </select>
     </label>
+    <div id="checkoutError" style="color:#b00020; display:none; text-align:left;"></div>
     <button type="button" onclick="checkout()">Wyślij zamówienie</button>
   </form>
 </div>
 
 <!-- 🔹 Cookie Banner -->
-<div id="cookieBanner" class="cookie-banner">
+<div id="cookieBanner" class="cookie-banner" role="region" aria-label="Cookie banner">
   Ta strona używa ciasteczek w celu poprawy działania i analizy. 
   <button onclick="acceptCookies()">Akceptuję</button>
   <button onclick="declineCookies()">Odrzuć</button>
 </div>
 
 <!-- 🔹 Newsletter -->
-<div id="newsletterPopup" class="modal hidden">
+<div id="newsletterPopup" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="newsletterTitle">
   <div class="modal-content">
-    <span class="close" onclick="closeNewsletter()">&times;</span>
-    <h2>Zapisz się do newslettera!</h2>
+    <button class="close" onclick="closeNewsletter()" aria-label="Zamknij newsletter">&times;</button>
+    <h2 id="newsletterTitle">Zapisz się do newslettera!</h2>
     <p>Otrzymuj informacje o nowościach i promocjach.</p>
-    <input type="email" id="newsletterEmail" placeholder="Twój email">
+    <input type="email" id="newsletterEmail" placeholder="Twój email" aria-label="Email do newslettera">
     <button onclick="subscribeNewsletter()">Zapisz się</button>
   </div>
 </div>

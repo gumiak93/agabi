@@ -114,3 +114,42 @@ footer { background:#ffb6b9; color:white; padding:10px; text-align:center; }
   .modal-content { width:90%; padding:15px; }
   .cart { width:80%; right:-90%; max-width:none; }
 }
+/* 🔹 Cookie Banner – wysuwany z dołu */
+.cookie-banner {
+  position: fixed;
+  bottom: -100px;
+  left: 0;
+  width: 100%;
+  background: #ffb6b9;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  z-index: 4000;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  transition: bottom 0.6s ease;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.15);
+}
+
+.cookie-banner.show {
+  bottom: 0;
+}
+
+.cookie-banner button {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  background: #fff;
+  color: #ff5a5f;
+  transition: 0.3s;
+}
+
+.cookie-banner button:hover {
+  background: #ffe6e6;
+  color: #ff2a2f;
+}

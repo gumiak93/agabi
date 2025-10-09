@@ -39,7 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
     cookieBanner.style.display = 'none';
     setTimeout(showNewsletter, 5000);
   } else {
-    cookieBanner.style.display = 'flex';
+    cookieBanner.classList.add('show');
+
     cookieBanner.style.pointerEvents = 'auto';
   }
 
@@ -270,8 +271,21 @@ function subscribeNewsletter() {
 // -----------------------------
 // Cookies
 // -----------------------------
-function acceptCookies() { localStorage.setItem('cookiesAccepted','true'); document.getElementById('cookieBanner').style.display='none'; setTimeout(showNewsletter, 5000);}
-function declineCookies() { localStorage.setItem('cookiesAccepted','false'); document.getElementById('cookieBanner').style.display='none'; }
+function acceptCookies() { 
+  localStorage.setItem('cookiesAccepted','true'); 
+  const banner = document.getElementById('cookieBanner');
+  banner.classList.remove('show');
+  setTimeout(() => banner.style.display = 'none', 600); // po animacji
+  setTimeout(showNewsletter, 5000);
+}
+
+function declineCookies() { 
+  localStorage.setItem('cookiesAccepted','false'); 
+  const banner = document.getElementById('cookieBanner');
+  banner.classList.remove('show');
+  setTimeout(() => banner.style.display = 'none', 600);
+}
+
 
 // -----------------------------
 // Bestsellery

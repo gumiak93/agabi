@@ -24,9 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('cookieBanner').style.display = 'none';
   }
 
-  // Newsletter
+  // Newsletter (poprawione)
+  const newsletterPopup = document.getElementById('newsletterPopup');
   if (localStorage.getItem('newsletterClosed') !== 'true') {
-    document.getElementById('newsletterPopup').classList.remove('hidden');
+    newsletterPopup.classList.remove('hidden');
+    newsletterPopup.style.display = 'flex';
+  } else {
+    newsletterPopup.classList.add('hidden');
+    newsletterPopup.style.display = 'none';
   }
 
   document.getElementById('cartToggle').addEventListener('click', toggleCart);
@@ -226,13 +231,17 @@ function declineCookies() { localStorage.setItem('cookiesAccepted', 'false'); do
 // 🔹 Menu mobilne
 function toggleMenu() { document.querySelector('nav').classList.toggle('show'); }
 
-// 🔹 Newsletter
+// 🔹 Newsletter (poprawione)
 function closeNewsletter() { 
   localStorage.setItem('newsletterClosed', 'true'); 
-  document.getElementById('newsletterPopup').classList.add('hidden'); 
+  const popup = document.getElementById('newsletterPopup');
+  popup.classList.add('hidden'); 
+  popup.style.display = 'none'; 
 }
 function subscribeNewsletter() { 
   alert('Zapisano do newslettera!'); 
   localStorage.setItem('newsletterClosed', 'true');
-  document.getElementById('newsletterPopup').classList.add('hidden'); 
+  const popup = document.getElementById('newsletterPopup');
+  popup.classList.add('hidden');
+  popup.style.display = 'none';
 }

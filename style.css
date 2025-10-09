@@ -95,10 +95,11 @@ nav button:hover { transform:scale(1.05); color:#fff0f0; animation:pulse 0.6s ea
 
 /* 🔹 Responsywność */
 @media(max-width:768px){
+  header { justify-content:center; position:relative; }
+  .menu-toggle { display:block; position:absolute; top:10px; left:10px; background:#ffb6b9; color:white; border:none; padding:8px 12px; border-radius:5px; font-weight:bold; cursor:pointer; z-index:2000; }
+  .logo { position:absolute; left:50%; transform:translateX(-50%); height:50px; }
   nav { display:none; flex-direction:column; gap:10px; margin-top:10px; }
   nav.show { display:flex; position:absolute; top:50px; right:10px; background:#ffb6b9; border-radius:10px; padding:10px; z-index:1001; }
-  .menu-toggle { display:block; position:sticky; top:10px; right:10px; background:#ffb6b9; color:white; border:none; padding:8px 12px; border-radius:5px; font-weight:bold; cursor:pointer; z-index:2000; }
-  .logo { height:50px; }
   .cart-toggle { position:fixed; top:80px; right:10px; font-size:18px; padding:8px 12px; z-index:2001; }
   .home-background { min-height:60vh; }
   .home-content { padding:10px; font-size:16px; }

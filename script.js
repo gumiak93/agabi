@@ -24,14 +24,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('cookieBanner').style.display = 'none';
   }
 
-  // Newsletter (poprawione)
+  // Newsletter
   const newsletterPopup = document.getElementById('newsletterPopup');
   if (localStorage.getItem('newsletterClosed') !== 'true') {
     newsletterPopup.classList.remove('hidden');
     newsletterPopup.style.display = 'flex';
+    newsletterPopup.style.pointerEvents = 'auto';
   } else {
     newsletterPopup.classList.add('hidden');
     newsletterPopup.style.display = 'none';
+    newsletterPopup.style.pointerEvents = 'none';
   }
 
   document.getElementById('cartToggle').addEventListener('click', toggleCart);
@@ -123,7 +125,7 @@ function addToCart() {
   else cart.push({ id: currentProduct.id, name: currentProduct.name, price: itemPrice, quantity: qty });
   updateCart();
   closeModal();
-  openCart(); // ✅ tylko po dodaniu produktu, nie przy zamykaniu newslettera
+  openCart(); // ✅ tylko po dodaniu produktu
 }
 
 function updateCart() {
@@ -237,6 +239,7 @@ function closeNewsletter() {
   const popup = document.getElementById('newsletterPopup');
   popup.classList.add('hidden'); 
   popup.style.display = 'none'; 
+  popup.style.pointerEvents = 'none'; // ✅ naprawa blokady
 }
 function subscribeNewsletter() { 
   alert('Zapisano do newslettera!'); 
@@ -244,4 +247,5 @@ function subscribeNewsletter() {
   const popup = document.getElementById('newsletterPopup');
   popup.classList.add('hidden');
   popup.style.display = 'none';
+  popup.style.pointerEvents = 'none'; // ✅ naprawa blokady
 }

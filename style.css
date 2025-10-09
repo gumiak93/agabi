@@ -6,7 +6,10 @@ body {
   color: #333;
   position: relative;
 }
-.hidden { display: none; }
+.hidden {
+  display: none !important;
+  pointer-events: none; /* 🔹 elementy ukryte nie reagują na kliknięcia */
+}
 
 /* 🔹 Home z GIF tłem */
 .home-background {

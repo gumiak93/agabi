@@ -221,6 +221,7 @@ async function checkout() {
     return;
   }
 
+  // Przygotowanie treści maila z produktami
   const itemsText = cart.map(i => `${i.name} x${i.quantity} - ${formatPrice(Number(i.price||0)*i.quantity)} zł`).join('\n');
   const totalPrice = formatPrice(cart.reduce((s,i)=>s + (Number(i.price||0)*i.quantity),0));
 

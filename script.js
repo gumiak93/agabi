@@ -175,7 +175,8 @@ function addToCart() {
 }
 
 function removeFromCart(id) {
-  cart = cart.filter(item => item.id !== id);
+  const numericId = Number(id); // upewniamy się, że id jest liczbą
+  cart = cart.filter(item => item.id !== numericId);
   updateCart();
 }
 
@@ -188,17 +189,23 @@ function updateCart() {
   } else {
     cart.forEach(item => {
       const li = document.createElement('li');
-      li.innerHTML = `
-        ${item.name} x${item.quantity} - ${formatPrice(Number(item.price || 0) * item.quantity)} zł
-        <button class="remove-btn" onclick="removeFromCart('${item.id}')">Usuń</button>
-      `;
+      li.innerHTML = `${item.name} x${item.quantity} - ${formatPrice(Number(item.price || 0) * item.quantity)} zł`;
+      
+      const removeBtn = document.createElement('button');
+      removeBtn.textContent = 'Usuń';
+      removeBtn.className = 'remove-btn';
+      removeBtn.addEventListener('click', () => removeFromCart(item.id));
+
+      li.appendChild(removeBtn);
       list.appendChild(li);
+
       total += (Number(item.price || 0) * item.quantity);
     });
   }
   document.getElementById('cartTotal').textContent = `Łącznie: ${formatPrice(total)} zł`;
   document.getElementById('cartCount').textContent = cart.reduce((a,b)=>a+(b.quantity||0),0);
 }
+
 
 function toggleCart() { 
   cartVisible = !cartVisible; 

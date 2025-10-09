@@ -325,3 +325,20 @@ function formatPrice(num) { const n = Number(num || 0); return n.toFixed(2); }
 function escapeHtml(text){ if (text===null||text===undefined) return ''; return String(text).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[m]); }
 function toggleMenu(){ const nav = document.querySelector('nav'); nav.classList.toggle('show'); const expanded = nav.classList.contains('show'); document.querySelector('.menu-toggle').setAttribute('aria-expanded', String(expanded)); }
 function validateEmail(email) { const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; return re.test(email); }
+
+// 🔹 Animacja elementów przy scrollu (produkty i bestsellery)
+function revealOnScroll() {
+  const elements = document.querySelectorAll('.product-card, .bestseller-item');
+  const windowHeight = window.innerHeight;
+
+  elements.forEach(el => {
+    const elementTop = el.getBoundingClientRect().top;
+    if (elementTop < windowHeight - 100) { // 100px przed osiągnięciem do widoku
+      el.classList.add('visible');
+    }
+  });
+}
+
+// wywołanie przy scrollu i od razu po załadowaniu
+window.addEventListener('scroll', revealOnScroll);
+window.addEventListener('load', revealOnScroll);

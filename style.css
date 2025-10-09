@@ -118,7 +118,6 @@ nav button:hover { transform:scale(1.05); color:#fff0f0; animation: pulse 0.6s e
   animation-play-state: paused;
 }
 
-
 /* 🔹 Animacje */
 @keyframes pulse {
   0% { transform: scale(1); }
@@ -133,13 +132,99 @@ nav button:hover { transform:scale(1.05); color:#fff0f0; animation: pulse 0.6s e
 .close { position:absolute; top:10px; right:10px; cursor:pointer; border:none; background:transparent; font-size:22px; }
 
 /* 🔹 Koszyk */
-.cart { position:fixed; top:0; right:-400px; width:300px; max-width:350px; height:90%; background:white; box-shadow:-2px 0 10px rgba(0,0,0,0.3); padding:20px; transition:right 0.4s ease; z-index:3000; display:flex; flex-direction:column; overflow-y:auto; pointer-events:auto; }
-.cart.active { right:0; animation: slideIn 0.4s ease forwards; }
-.cart ul { list-style:none; padding:0; max-height:300px; overflow-y:auto; text-align:left; }
-.cart form { display:flex; flex-direction:column; margin-top:10px; gap:10px; }
-.cart label { display:flex; flex-direction:column; text-align:left; font-size:14px; }
-.cart input, .cart select { padding:5px; border-radius:5px; border:1px solid #ccc; }
-.cart button { padding:8px; border:none; background:#ff5a5f; color:white; border-radius:5px; cursor:pointer; }
+.cart { 
+  position:fixed; 
+  top:0; 
+  right:-400px; 
+  width:300px; 
+  max-width:350px; 
+  height:90%; 
+  background:white; 
+  box-shadow:-2px 0 10px rgba(0,0,0,0.3); 
+  padding:20px; 
+  transition:right 0.4s ease; 
+  z-index:3000; 
+  display:flex; 
+  flex-direction:column; 
+  overflow-y:auto; 
+  pointer-events:auto; 
+}
+
+.cart.active { 
+  right:0; 
+  animation: slideIn 0.4s ease forwards; 
+}
+
+.cart ul { 
+  list-style:none; 
+  padding:0; 
+  margin:0; 
+  max-height:300px; 
+  overflow-y:auto; 
+  text-align:left; 
+}
+
+.cart li { 
+  display:flex; 
+  justify-content:space-between; 
+  align-items:center; 
+  padding:8px 0; 
+  border-bottom:1px solid #eee; 
+}
+
+.cart li:last-child { border-bottom:none; }
+
+.cart li span { flex:1; text-align:left; }
+
+/* przycisk z ikoną kosza */
+.cart li button.remove-btn { 
+  flex-shrink:0; 
+  background:#ff5a5f; 
+  color:white; 
+  border:none; 
+  border-radius:5px; 
+  padding:5px 10px; 
+  cursor:pointer; 
+  transition:0.3s; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  font-size:14px;
+}
+
+.cart li button.remove-btn::before { content:"🗑️"; }
+
+.cart li button.remove-btn:hover { background:#ff2a2f; }
+
+/* Koszyk – formularz */
+.cart form { 
+  display:flex; 
+  flex-direction:column; 
+  margin-top:10px; 
+  gap:10px; 
+}
+
+.cart label { 
+  display:flex; 
+  flex-direction:column; 
+  text-align:left; 
+  font-size:14px; 
+}
+
+.cart input, .cart select { 
+  padding:5px; 
+  border-radius:5px; 
+  border:1px solid #ccc; 
+}
+
+.cart button { 
+  padding:8px; 
+  border:none; 
+  background:#ff5a5f; 
+  color:white; 
+  border-radius:5px; 
+  cursor:pointer; 
+}
 
 /* 🔹 Animacja wysuwania koszyka */
 @keyframes slideIn {
@@ -151,8 +236,29 @@ nav button:hover { transform:scale(1.05); color:#fff0f0; animation: pulse 0.6s e
 footer { background:#ffb6b9; color:white; padding:10px; text-align:center; }
 
 /* 🔹 Cookie Banner */
-.cookie-banner { position:fixed; bottom:0; left:0; width:100%; background:#ffb6b9; color:white; padding:15px; text-align:center; z-index:4000; display:flex; justify-content:center; gap:10px; align-items:center; }
-.cookie-banner button { margin-left:10px; padding:5px 10px; border:none; border-radius:5px; cursor:pointer; font-weight:bold; }
+.cookie-banner { 
+  position:fixed; 
+  bottom:0; 
+  left:0; 
+  width:100%; 
+  background:#ffb6b9; 
+  color:white; 
+  padding:15px; 
+  text-align:center; 
+  z-index:4000; 
+  display:flex; 
+  justify-content:center; 
+  gap:10px; 
+  align-items:center; 
+}
+.cookie-banner button { 
+  margin-left:10px; 
+  padding:5px 10px; 
+  border:none; 
+  border-radius:5px; 
+  cursor:pointer; 
+  font-weight:bold; 
+}
 .cookie-banner button:hover { opacity:0.8; }
 
 /* 🔹 Responsywność */

@@ -221,16 +221,18 @@ async function checkout() {
     return;
   }
 
-  // Przygotowanie treści maila z produktami
-  const itemsText = cart.map(i => `${i.name} x${i.quantity} - ${formatPrice(Number(i.price||0)*i.quantity)} zł`).join('\n');
-  const totalPrice = formatPrice(cart.reduce((s,i)=>s + (Number(i.price||0)*i.quantity),0));
+  
+  // Przygotowanie treści maila z produktami w formacie HTML
+const itemsText = '<ul>' + cart.map(i => `<li>${i.name} x${i.quantity} - ${formatPrice(Number(i.price||0)*i.quantity)} zł</li>`).join('') + '</ul>';
+const totalPrice = formatPrice(cart.reduce((s,i)=>s + (Number(i.price||0)*i.quantity),0));
 
-  try {
-    await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
-      name, phone, email, address, payment,
-      items: itemsText,
-      total: totalPrice
-    }, EMAILJS_PUBLIC_KEY);
+try {
+  await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+    name, phone, email, address, payment,
+    items: itemsText,
+    total: totalPrice
+  }, EMAILJS_PUBLIC_KEY);
+
 
     alert('Zamówienie wysłane emailem do sprzedawcy!');
   } catch(e) {

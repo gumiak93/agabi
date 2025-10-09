@@ -1,7 +1,6 @@
 // 🔹 Supabase
 const SUPABASE_URL = 'https://mkvpqnvlzdrujsqkdpmi.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1rdnBxbnZsemRydWpzcWtkcG1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk4NDc4MDcsImV4cCI6MjA3NTQyMzgwN30.QuCU__UgvzofofS-T5Y-XzdLW7EakZZzh4DwQP4xAnA';
-
+const SUPABASE_KEY = 'YOUR_SUPABASE_KEY';
 let supabase;
 
 // 🔹 Dane i koszyk
@@ -11,7 +10,7 @@ let cart = [];
 let currentProduct = null;
 let cartVisible = false;
 
-// 🔹 Inicjalizacja po załadowaniu DOM
+// 🔹 Inicjalizacja
 document.addEventListener("DOMContentLoaded", () => {
   supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -20,20 +19,13 @@ document.addEventListener("DOMContentLoaded", () => {
   loadCategories();
 
   // Cookie banner
+  const cookieBanner = document.getElementById('cookieBanner');
   if (localStorage.getItem('cookiesAccepted') === 'true') {
-    document.getElementById('cookieBanner').style.display = 'none';
-  }
-
-  // Newsletter
-  const newsletterPopup = document.getElementById('newsletterPopup');
-  if (localStorage.getItem('newsletterClosed') !== 'true') {
-    newsletterPopup.classList.remove('hidden');
-    newsletterPopup.style.display = 'flex';
-    newsletterPopup.style.pointerEvents = 'auto';
+    cookieBanner.style.display = 'none';
+    showNewsletter();
   } else {
-    newsletterPopup.classList.add('hidden');
-    newsletterPopup.style.display = 'none';
-    newsletterPopup.style.pointerEvents = 'none';
+    cookieBanner.style.display = 'flex';
+    cookieBanner.style.pointerEvents = 'auto';
   }
 
   document.getElementById('cartToggle').addEventListener('click', toggleCart);
@@ -42,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
       document.getElementById(btn.dataset.target).classList.remove('hidden');
-      if (document.querySelector('nav.show')) document.querySelector('nav').classList.remove('show');
+      document.querySelector('nav').classList.remove('show');
     });
   });
 });
@@ -75,12 +67,10 @@ async function loadProductsFromSupabase() {
 
 // 🔹 Kategorie
 function loadCategories() {
-  const buttons = document.querySelectorAll('.categories button');
-  buttons.forEach(btn => {
+  document.querySelectorAll('.categories button').forEach(btn => {
     btn.onclick = () => {
       document.querySelectorAll('.category').forEach(c => c.classList.add('hidden'));
-      const cat = btn.dataset.cat;
-      document.getElementById(cat).classList.remove('hidden');
+      document.getElementById(btn.dataset.cat).classList.remove('hidden');
     };
   });
 }
@@ -98,154 +88,92 @@ function loadProducts(cat) {
       <h3>${escapeHtml(p.name)}</h3>
       <p>${formatPrice(p.price)} zł</p>
     `;
-    div.onclick = () => showProductDetail(p);
+    div.addEventListener('click', () => showProductDetail(p));
     container.appendChild(div);
   });
 }
 
-// 🔹 Modal
+// 🔹 Modal produktu
 function showProductDetail(p) {
   currentProduct = p;
   document.getElementById('modalTitle').textContent = p.name;
   document.getElementById('modalImage').src = p.image || p.image2 || 'images/placeholder.jpg';
   document.getElementById('modalDesc').textContent = p.description || '';
-  document.getElementById('modalPrice').textContent = `Cena: ${formatPrice(p.price)} zł`;
+  document.getElementById('modalPrice').textContent = `${formatPrice(p.price)} zł`;
   document.getElementById('quantity').value = 1;
-  document.getElementById('productModal').style.display = 'flex';
+  document.getElementById('productModal').classList.remove('hidden');
 }
-function closeModal() { document.getElementById('productModal').style.display = 'none'; }
+function closeModal() { document.getElementById('productModal').classList.add('hidden'); }
 
 // 🔹 Koszyk
 function addToCart() {
   const qty = parseInt(document.getElementById('quantity').value);
-  if (!currentProduct || qty < 1) return;
-  const existing = cart.find(i => i.id === currentProduct.id);
-  const itemPrice = Number(currentProduct.price || 0);
-  if (existing) existing.quantity += qty;
-  else cart.push({ id: currentProduct.id, name: currentProduct.name, price: itemPrice, quantity: qty });
+  const prod = { ...currentProduct, quantity: qty };
+  const index = cart.findIndex(c => c.id === prod.id);
+  if (index !== -1) cart[index].quantity += qty;
+  else cart.push(prod);
   updateCart();
   closeModal();
-  openCart(); // ✅ tylko po dodaniu produktu
 }
-
 function updateCart() {
   const list = document.getElementById('cartItems');
-  const totalEl = document.getElementById('cartTotal');
   list.innerHTML = '';
-  if (cart.length === 0) {
-    list.innerHTML = '<li>Twój koszyk jest pusty.</li>';
-    totalEl.textContent = 'Łącznie: 0 zł';
-  } else {
-    let total = 0;
-    cart.forEach(item => {
-      total += item.price * item.quantity;
-      const li = document.createElement('li');
-      li.innerHTML = `${escapeHtml(item.name)} x${item.quantity} - ${(item.price * item.quantity).toFixed(2)} zł <button onclick="removeFromCart(${item.id})">🗑️</button>`;
-      list.appendChild(li);
-    });
-    totalEl.textContent = `Łącznie: ${total.toFixed(2)} zł`;
+  let total = 0;
+  if (cart.length === 0) list.innerHTML = '<li>Twój koszyk jest pusty.</li>';
+  else cart.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = `${item.name} x${item.quantity} - ${formatPrice(item.price * item.quantity)} zł`;
+    list.appendChild(li);
+    total += item.price * item.quantity;
+  });
+  document.getElementById('cartTotal').textContent = `Łącznie: ${formatPrice(total)} zł`;
+  document.getElementById('cartCount').textContent = cart.reduce((a,b)=>a+b.quantity,0);
+}
+function toggleCart() { 
+  cartVisible = !cartVisible; 
+  const c = document.getElementById('cart'); 
+  cartVisible ? c.classList.add('active') : c.classList.remove('active'); 
+}
+
+// 🔹 Checkout
+function showCheckoutForm() { document.getElementById('cartForm').classList.toggle('hidden'); }
+function checkout() { alert('Zamówienie wysłane!'); cart=[]; updateCart(); document.getElementById('cartForm').classList.add('hidden'); }
+
+// 🔹 Newsletter
+function showNewsletter() {
+  const popup = document.getElementById('newsletterPopup');
+  if (localStorage.getItem('newsletterClosed') !== 'true') {
+    popup.classList.remove('hidden');
+    popup.style.display = 'flex';
+    popup.style.pointerEvents = 'auto';
   }
-  document.getElementById('cartCount').textContent = cart.length;
-  document.getElementById('cartForm').classList.add('hidden');
 }
+function closeNewsletter() { localStorage.setItem('newsletterClosed','true'); const popup=document.getElementById('newsletterPopup'); popup.classList.add('hidden'); popup.style.display='none'; }
+function subscribeNewsletter() { alert('Zapisano do newslettera!'); closeNewsletter(); }
 
-function removeFromCart(id) { cart = cart.filter(i => i.id !== id); updateCart(); }
+// 🔹 Cookies
+function acceptCookies() { localStorage.setItem('cookiesAccepted','true'); document.getElementById('cookieBanner').style.display='none'; showNewsletter(); }
+function declineCookies() { localStorage.setItem('cookiesAccepted','false'); document.getElementById('cookieBanner').style.display='none'; showNewsletter(); }
 
-function toggleCart() {
-  cartVisible = !cartVisible;
-  document.getElementById('cart').classList.toggle('active', cartVisible);
-}
-
-function openCart() {
-  const cartEl = document.getElementById('cart');
-  cartEl.classList.add('active');
-  cartEl.classList.remove('hidden');
-  cartVisible = true;
-}
-
-function showCheckoutForm() {
-  if (cart.length === 0) { alert("Koszyk jest pusty!"); return; }
-  document.getElementById('cartForm').classList.remove('hidden');
-}
-
-// 🔹 Bestseller
+// 🔹 Bestsellery
 function loadBestsellers() {
   const container = document.getElementById('bestsellers');
   container.innerHTML = '';
   bestsellers.forEach(p => {
     const div = document.createElement('div');
-    div.className = 'bestseller-item';
+    div.className='bestseller-item';
     div.innerHTML = `
-      <img src="${p.image || p.image2 || 'images/placeholder.jpg'}" alt="${escapeHtml(p.name)}">
-      <div class="bestseller-label">BESTSELLER</div>
-      <div class="bestseller-name">${escapeHtml(p.name)}</div>
-      <div class="bestseller-price">${formatPrice(p.price)} zł</div>
+      <img src="${p.image || 'images/placeholder.jpg'}" alt="${escapeHtml(p.name)}">
+      <span class="bestseller-label">Bestseller</span>
+      <p class="bestseller-name">${escapeHtml(p.name)}</p>
+      <p class="bestseller-price">${formatPrice(p.price)} zł</p>
     `;
+    div.addEventListener('click',()=>showProductDetail(p));
     container.appendChild(div);
   });
 }
 
-// 🔹 Utility
-function formatPrice(val) { return (Number(val) || 0).toFixed(2); }
-function escapeHtml(text) {
-  if (!text) return '';
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-// 🔹 EmailJS
-emailjs.init("7WfAAPMnAEYw40agp");
-
-function checkout() {
-  const name = document.getElementById('name').value;
-  const phone = document.getElementById('phone').value;
-  const email = document.getElementById('email').value;
-  const address = document.getElementById('address').value;
-  const payment = document.getElementById('payment').value;
-
-  if (!name || !phone || !email || !address) return alert('Proszę wypełnić wszystkie pola.');
-
-  const orderDetails = cart.map(i => `${i.name} x${i.quantity}`).join(', ');
-  const totalPrice = cart.reduce((sum, i) => sum + i.price * i.quantity, 0).toFixed(2);
-
-  emailjs.send('service_9hspj2l', 'template_nythj6i', {
-    from_name: name,
-    from_email: email,
-    phone,
-    address,
-    payment,
-    order: orderDetails,
-    total: totalPrice
-  }).then(() => {
-    alert('Zamówienie wysłane!');
-    cart = [];
-    updateCart();
-    document.getElementById('cartForm').classList.add('hidden');
-  }).catch(err => {
-    console.error('Błąd wysyłki maila:', err);
-    alert('Wystąpił błąd podczas wysyłki zamówienia. Spróbuj ponownie.');
-  });
-}
-
-// 🔹 Cookie banner
-function acceptCookies() { localStorage.setItem('cookiesAccepted', 'true'); document.getElementById('cookieBanner').style.display = 'none'; }
-function declineCookies() { localStorage.setItem('cookiesAccepted', 'false'); document.getElementById('cookieBanner').style.display = 'none'; }
-
-// 🔹 Menu mobilne
-function toggleMenu() { document.querySelector('nav').classList.toggle('show'); }
-
-// 🔹 Newsletter
-function closeNewsletter() { 
-  localStorage.setItem('newsletterClosed', 'true'); 
-  const popup = document.getElementById('newsletterPopup');
-  popup.classList.add('hidden'); 
-  popup.style.display = 'none'; 
-  popup.style.pointerEvents = 'none'; // ✅ naprawa blokady
-}
-function subscribeNewsletter() { 
-  alert('Zapisano do newslettera!'); 
-  localStorage.setItem('newsletterClosed', 'true');
-  const popup = document.getElementById('newsletterPopup');
-  popup.classList.add('hidden');
-  popup.style.display = 'none';
-  popup.style.pointerEvents = 'none'; // ✅ naprawa blokady
-}
+// 🔹 Pomocnicze
+function formatPrice(num) { return num.toFixed(2); }
+function escapeHtml(text){ return text.replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[m]); }
+function toggleMenu(){ document.querySelector('nav').classList.toggle('show'); }

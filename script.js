@@ -67,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  loadCart(); // 🔹 Wczytanie koszyka z localStorage
   updateCart();
   revealOnScroll();
   window.addEventListener('scroll', revealOnScroll);
@@ -170,6 +171,7 @@ function addToCart() {
   const index = cart.findIndex(c => c.id === prod.id);
   if (index !== -1) cart[index].quantity += qty;
   else cart.push(prod);
+  saveCart(); // 🔹 zapis do localStorage
   updateCart();
   closeModal();
 }
@@ -177,6 +179,7 @@ function addToCart() {
 function removeFromCart(id) {
   const numericId = Number(id);
   cart = cart.filter(item => item.id !== numericId);
+  saveCart(); // 🔹 zapis po usunięciu
   updateCart();
 }
 
@@ -190,12 +193,10 @@ function updateCart() {
     cart.forEach(item => {
       const li = document.createElement('li');
 
-      // 🔹 Miniaturka
       const img = document.createElement('img');
       img.src = item.image || item.image2 || 'images/placeholder.jpg';
       img.alt = item.name || 'Produkt';
 
-      // 🔹 Nazwa i cena w kolumnie
       const infoDiv = document.createElement('div');
       infoDiv.style.display = 'flex';
       infoDiv.style.flexDirection = 'column';
@@ -210,7 +211,6 @@ function updateCart() {
       priceSpan.textContent = `- ${formatPrice(Number(item.price || 0) * item.quantity)} zł`;
       infoDiv.appendChild(priceSpan);
 
-      // 🔹 Ilość
       const qtyInput = document.createElement('input');
       qtyInput.type = 'number';
       qtyInput.min = 1;
@@ -220,17 +220,16 @@ function updateCart() {
       qtyInput.addEventListener('change', () => {
         const newQty = parseInt(qtyInput.value) || 1;
         item.quantity = newQty;
+        saveCart(); // 🔹 zapis po zmianie ilości
         updateCart();
       });
 
-      // 🔹 Przycisk usuń
       const removeBtn = document.createElement('button');
       removeBtn.textContent = 'Usuń';
       removeBtn.className = 'remove-btn';
       removeBtn.style.flexShrink = '0';
       removeBtn.addEventListener('click', () => removeFromCart(item.id));
 
-      // 🔹 Składanie elementów
       li.appendChild(img);
       li.appendChild(infoDiv);
       li.appendChild(qtyInput);
@@ -245,6 +244,18 @@ function updateCart() {
   document.getElementById('cartCount').textContent = cart.reduce((a,b)=>a+(b.quantity||0),0);
 }
 
+// 🔹 Zapis koszyka do localStorage
+function saveCart() {
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+// 🔹 Wczytanie koszyka z localStorage
+function loadCart() {
+  const stored = JSON.parse(localStorage.getItem('cart') || '[]');
+  if (Array.isArray(stored)) cart = stored;
+}
+
+// -----------------------------
 function toggleCart() { 
   cartVisible = !cartVisible; 
   const c = document.getElementById('cart'); 
@@ -255,7 +266,6 @@ function toggleCart() {
     c.classList.remove('active');
   }
 }
-
 
 // -----------------------------
 // Checkout z EmailJS
@@ -297,6 +307,7 @@ async function checkout() {
   }
 
   cart = [];
+  saveCart(); // 🔹 czyścimy koszyk w localStorage po wysłaniu
   updateCart();
   document.getElementById('cartForm').classList.add('hidden');
   ['name','phone','email','address'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });

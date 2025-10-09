@@ -101,11 +101,23 @@ nav button:hover { transform:scale(1.05); color:#fff0f0; animation: pulse 0.6s e
 .bestseller-name { margin-top:8px; font-weight:bold; font-size:14px; }
 .bestseller-price { margin-top:4px; font-size:13px; color:#333; }
 
-/* 🔹 Animacja marquee bestsellerów */
-@keyframes scrollBestsellers {
-  0% { transform: translateX(100%); }
+/* 🔹 Marquee dla bestsellerów */
+.bestsellers {
+  display: flex;
+  gap: 20px;
+  animation: marquee 20s linear infinite;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
 }
+
+/* Zatrzymanie animacji przy hover */
+.bestsellers:hover {
+  animation-play-state: paused;
+}
+
 
 /* 🔹 Animacje */
 @keyframes pulse {

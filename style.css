@@ -139,8 +139,8 @@ footer { background:#ffb6b9; color:white; padding:10px; text-align:center; }
 
   .logo { height:50px; }
   
-  /* Koszyk przyklejony do prawej krawędzi ekranu */
-  .cart-toggle { position:fixed; top:15px; right:10px; font-size:18px; padding:8px 12px; z-index:2001; }
+  /* Koszyk przyklejony do prawej krawędzi ekranu, trochę niżej */
+  .cart-toggle { position:fixed; top:80px; right:10px; font-size:18px; padding:8px 12px; z-index:2001; }
 
   .home-background { min-height:60vh; }
   .home-content { padding:10px; font-size:16px; }

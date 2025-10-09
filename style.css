@@ -152,6 +152,20 @@ nav button:hover { transform:scale(1.05); color:#fff0f0; animation: pulse 0.6s e
   border-bottom:1px solid #eee; 
   flex-wrap: nowrap; 
 }
+.cart li img {
+  width: 40px;   /* desktop */
+  height: 40px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+@media(max-width:768px) {
+  .cart li img {
+    width: 30px;  /* mobile */
+    height: 30px;
+  }
+}
+
 .cart li:last-child { border-bottom:none; }
 
 .cart li div { 

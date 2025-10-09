@@ -195,9 +195,20 @@ function updateCart() {
       img.src = item.image || item.image2 || 'images/placeholder.jpg';
       img.alt = item.name || 'Produkt';
 
-      // 🔹 Nazwa
+      // 🔹 Nazwa i cena w kolumnie
+      const infoDiv = document.createElement('div');
+      infoDiv.style.display = 'flex';
+      infoDiv.style.flexDirection = 'column';
+      infoDiv.style.flex = '1';
+      infoDiv.style.minWidth = '0';
+
       const textSpan = document.createElement('span');
-      textSpan.textContent = `${item.name} x`;
+      textSpan.textContent = item.name || '';
+      infoDiv.appendChild(textSpan);
+
+      const priceSpan = document.createElement('span');
+      priceSpan.textContent = `- ${formatPrice(Number(item.price || 0) * item.quantity)} zł`;
+      infoDiv.appendChild(priceSpan);
 
       // 🔹 Ilość
       const qtyInput = document.createElement('input');
@@ -212,21 +223,17 @@ function updateCart() {
         updateCart();
       });
 
-      // 🔹 Cena
-      const priceSpan = document.createElement('span');
-      priceSpan.textContent = ` - ${formatPrice(Number(item.price || 0) * item.quantity)} zł `;
-
       // 🔹 Przycisk usuń
       const removeBtn = document.createElement('button');
       removeBtn.textContent = 'Usuń';
       removeBtn.className = 'remove-btn';
+      removeBtn.style.flexShrink = '0';
       removeBtn.addEventListener('click', () => removeFromCart(item.id));
 
       // 🔹 Składanie elementów
       li.appendChild(img);
-      li.appendChild(textSpan);
+      li.appendChild(infoDiv);
       li.appendChild(qtyInput);
-      li.appendChild(priceSpan);
       li.appendChild(removeBtn);
 
       list.appendChild(li);
@@ -248,6 +255,7 @@ function toggleCart() {
     c.classList.remove('active');
   }
 }
+
 
 // -----------------------------
 // Checkout z EmailJS

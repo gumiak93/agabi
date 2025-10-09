@@ -42,9 +42,42 @@ html { scroll-behavior: smooth; }
 .home-content { position:relative; z-index:3; color:#fff; text-align:center; }
 
 /* 🔹 Banner */
-.top-banner { width:100%; background:#ffcccc; height:35px; display:flex; align-items:center; overflow:hidden; white-space:nowrap; }
-.banner-text { display:inline-block; animation: slide 20s linear infinite; font-weight:bold; }
-@keyframes slide { 0% { transform:translateX(100%); } 100% { transform:translateX(-100%); } }
+.top-banner {
+  width: 100%;
+  background: #ffcccc;
+  height: 60px; /* większa wysokość, żeby zmieścić obrazki */
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.banner-wrapper {
+  display: inline-block;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.banner-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  font-weight: bold;
+  font-size: 18px; /* większa czcionka, żeby wyglądało proporcjonalnie */
+  animation: slide 20s linear infinite;
+}
+
+.banner-gif {
+  height: 40px; /* dopasowane do wysokości banera */
+  width: auto;
+  vertical-align: middle;
+}
+
+@keyframes slide {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
 
 /* 🔹 Header */
 header { background:#ffb6b9; padding:10px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:1000; }

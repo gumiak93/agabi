@@ -45,39 +45,34 @@ html { scroll-behavior: smooth; }
 .top-banner {
   width: 100%;
   background: #ffcccc;
-  height: 60px; /* większa wysokość, żeby zmieścić obrazki */
+  height: 60px;
   display: flex;
   align-items: center;
   overflow: hidden;
   position: relative;
 }
-
 .banner-wrapper {
   display: inline-block;
   white-space: nowrap;
   width: 100%;
 }
-
 .banner-text {
   display: inline-flex;
   align-items: center;
   gap: 20px;
   font-weight: bold;
-  font-size: 18px; /* większa czcionka, żeby wyglądało proporcjonalnie */
+  font-size: 18px;
   animation: slide 20s linear infinite;
 }
-
 .banner-gif {
-  height: 40px; /* dopasowane do wysokości banera */
+  height: 40px;
   width: auto;
   vertical-align: middle;
 }
-
 @keyframes slide {
   0% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
 }
-
 
 /* 🔹 Header */
 header { background:#ffb6b9; padding:10px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:1000; }
@@ -87,48 +82,8 @@ nav button { background:none; border:none; color:white; font-weight:bold; cursor
 nav button:hover { transform:scale(1.05); color:#fff0f0; }
 .cart-toggle { background:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; }
 
-/* 🔹 Kategorie */
-.categories { margin:20px 0; }
-.categories button { margin:5px; background:#ffb6b9; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer; }
-.categories button:hover { background:#ff9aa2; }
-
-/* 🔹 Produkty */
-.product-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; }
-.product-card { background:white; border-radius:15px; width:200px; padding:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); cursor:pointer; transition:0.3s; }
-.product-card:hover { transform:scale(1.05); box-shadow:0 5px 15px rgba(0,0,0,0.15); }
-.product-card img { width:100%; border-radius:10px; }
-
-/* 🔹 Bestsellery */
-.bestsellers-wrapper { overflow:hidden; width:100%; margin:20px 0; padding:0 20px; }
-.bestsellers { display:flex; gap:20px; }
-.bestseller-item { flex:0 0 180px; background:white; border-radius:15px; padding:10px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.1); position:relative; cursor:pointer; }
-.bestseller-item img { width:100%; height:150px; object-fit:cover; border-radius:10px; }
-.bestseller-label { position:absolute; top:10px; left:10px; background:#ff5a5f; color:white; padding:2px 6px; font-size:12px; border-radius:5px; font-weight:bold; }
-.bestseller-name { margin-top:8px; font-weight:bold; font-size:14px; }
-.bestseller-price { margin-top:4px; font-size:13px; color:#333; }
-
-/* 🔹 Modal */
-.modal { display:flex; justify-content:center; align-items:center; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); z-index:5000; }
-.modal-content { background:white; padding:20px; border-radius:15px; width:350px; position:relative; }
-.modal-content img { width:100%; object-fit:contain; margin-bottom:15px; }
-.close { position:absolute; top:10px; right:10px; cursor:pointer; border:none; background:transparent; font-size:22px; }
-
-/* 🔹 Koszyk */
-.cart { position:fixed; top:0; right:-400px; width:300px; max-width:350px; height:90%; background:white; box-shadow:-2px 0 10px rgba(0,0,0,0.3); padding:20px; transition:right 0.4s ease; z-index:3000; display:flex; flex-direction:column; overflow-y:auto; pointer-events:auto; }
-.cart.active { right:0; }
-.cart ul { list-style:none; padding:0; max-height:300px; overflow-y:auto; text-align:left; }
-.cart form { display:flex; flex-direction:column; margin-top:10px; gap:10px; }
-.cart label { display:flex; flex-direction:column; text-align:left; font-size:14px; }
-.cart input, .cart select { padding:5px; border-radius:5px; border:1px solid #ccc; }
-.cart button { padding:8px; border:none; background:#ff5a5f; color:white; border-radius:5px; cursor:pointer; }
-
-/* 🔹 Footer */
-footer { background:#ffb6b9; color:white; padding:10px; text-align:center; }
-
-/* 🔹 Cookie Banner */
-.cookie-banner { position:fixed; bottom:0; left:0; width:100%; background:#ffb6b9; color:white; padding:15px; text-align:center; z-index:4000; display:flex; justify-content:center; gap:10px; align-items:center; }
-.cookie-banner button { margin-left:10px; padding:5px 10px; border:none; border-radius:5px; cursor:pointer; font-weight:bold; }
-.cookie-banner button:hover { opacity:0.8; }
+/* Ukrycie przycisku MENU na desktopie */
+.menu-toggle { display: none; }
 
 /* 🔹 Responsywność */
 @media(max-width:768px){
@@ -147,6 +102,7 @@ footer { background:#ffb6b9; color:white; padding:10px; text-align:center; }
   .modal-content { width:90%; padding:15px; }
   .cart { width:80%; right:-90%; max-width:none; }
 }
+
 /* 🔹 Cookie Banner – wysuwany z dołu */
 .cookie-banner {
   position: fixed;
@@ -165,11 +121,7 @@ footer { background:#ffb6b9; color:white; padding:10px; text-align:center; }
   transition: bottom 0.6s ease;
   box-shadow: 0 -4px 10px rgba(0,0,0,0.15);
 }
-
-.cookie-banner.show {
-  bottom: 0;
-}
-
+.cookie-banner.show { bottom: 0; }
 .cookie-banner button {
   margin-left: 10px;
   padding: 6px 12px;
@@ -181,8 +133,4 @@ footer { background:#ffb6b9; color:white; padding:10px; text-align:center; }
   color: #ff5a5f;
   transition: 0.3s;
 }
-
-.cookie-banner button:hover {
-  background: #ffe6e6;
-  color: #ff2a2f;
-}
+.cookie-banner button:hover { background: #ffe6e6; color: #ff2a2f; }

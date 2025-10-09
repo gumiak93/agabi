@@ -1,14 +1,16 @@
 // -----------------------------
-// script.js - ulepszona wersja
+// script.js - ulepszona wersja z EmailJS
 // -----------------------------
 
-// 🔹 Supabase: ustaw tutaj swój publiczny (anon) klucz.
-// Uwaga: jeśli klucz ma uprawnienia tylko do odczytu, INSERT (zapis zamówień) z klienta nie będzie działał.
-// Zalecane: używać anon klucza tylko do SELECT. Jeśli chcesz zapisywać zamówienia bezpiecznie,
-// utwórz endpoint serwerowy (np. na Vercel) i wywołuj go z klienta.
+// 🔹 Supabase
 const SUPABASE_URL = 'https://mkvpqnvlzdrujsqkdpmi.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1rdnBxbnZsemRydWpzcWtkcG1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk4NDc4MDcsImV4cCI6MjA3NTQyMzgwN30.QuCU__UgvzofofS-T5Y-XzdLW7EakZZzh4DwQP4xAnA'; // <-- podmień podczas deployu
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1rdnBxbnZsemRydWpzcWtkcG1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk4NDc4MDcsImV4cCI6MjA3NTQyMzgwN30.QuCU__UgvzofofS-T5Y-XzdLW7EakZZzh4DwQP4xAnA';
 let supabase;
+
+// 🔹 EmailJS
+const EMAILJS_SERVICE = 'service_9hspj2l';
+const EMAILJS_TEMPLATE = 'template_nythj6i';
+const EMAILJS_PUBLIC_KEY = '7WfAAPMnAEYw40agp';
 
 // 🔹 Dane i koszyk
 let productsData = { candles: [], bouquets: [], promotions: [] };
@@ -21,28 +23,20 @@ let cartVisible = false;
 // Inicjalizacja
 // -----------------------------
 document.addEventListener("DOMContentLoaded", () => {
-  // inicjalizacja supabase (wymaga podmiany SUPABASE_KEY)
   if (SUPABASE_KEY && SUPABASE_KEY !== 'REPLACE_WITH_YOUR_ANON_KEY') {
     supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   } else {
-    // jeśli brak klucza - supabase będzie undefined, ale strona działa do przeglądania produktów statycznych
-    console.warn('Supabase key not set. Jeśli chcesz pobierać produkty z Supabase, podmień SUPABASE_KEY w script.js.');
+    console.warn('Supabase key not set.');
   }
 
   document.getElementById('home').classList.remove('hidden');
   if (supabase) loadProductsFromSupabase();
-  else {
-    // fallback: jeśli nie ma supabase, można załadować products.json lokalnie (opcjonalne) lub zostawić puste
-    console.info('Supabase nie jest zainicjalizowany — produkty nie zostały pobrane z bazy.');
-  }
 
   loadCategories();
 
-  // Cookie banner
   const cookieBanner = document.getElementById('cookieBanner');
   if (localStorage.getItem('cookiesAccepted') === 'true') {
     cookieBanner.style.display = 'none';
-    // newsletter po krótkim opóźnieniu
     setTimeout(showNewsletter, 5000);
   } else {
     cookieBanner.style.display = 'flex';
@@ -57,25 +51,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const target = document.getElementById(btn.dataset.target);
       if (target) {
         target.classList.remove('hidden');
-        // Dodatkowy UX: przewiń do sekcji (jeśli jest mała widoczność w mobile)
         setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
       }
       document.querySelector('nav').classList.remove('show');
-      // accessibility
       document.querySelector('.menu-toggle').setAttribute('aria-expanded', 'false');
     });
   });
 
-  // accessibility: close newsletter on ESC / modal close
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeModal();
       closeNewsletter();
-      const c=document.getElementById('cart'); if (c.classList.contains('active')) toggleCart();
+      const c = document.getElementById('cart');
+      if (c.classList.contains('active')) toggleCart();
     }
   });
 
-  // update cart counter on load (jeśli jest zawartość w localStorage w przyszłości)
   updateCart();
 });
 
@@ -103,8 +94,7 @@ async function loadProductsFromSupabase() {
     });
 
     loadBestsellers();
-    loadProducts('candles'); // default load
-    // notujemy, ale produkty są ładowane też wtedy kiedy uzytkownik otworzy kategorię
+    loadProducts('candles'); 
     loadProducts('bouquets');
     loadProducts('promotions');
   } catch (e) {
@@ -139,7 +129,6 @@ function loadProducts(cat) {
     const div = document.createElement('div');
     div.className = 'product-card';
     const imgSrc = p.image || p.image2 || 'images/placeholder.jpg';
-    // ensure safe text for alt and name
     const safeName = escapeHtml((p.name || 'Produkt').toString());
     div.innerHTML = `
       <img src="${imgSrc}" alt="${safeName}">
@@ -210,69 +199,47 @@ function toggleCart() {
 }
 
 // -----------------------------
-// Checkout (walidacja + próbny zapis)
+// Checkout z EmailJS
 // -----------------------------
 function showCheckoutForm() { document.getElementById('cartForm').classList.toggle('hidden'); }
 
 async function checkout() {
-  // prosta walidacja
   const name = document.getElementById('name').value.trim();
   const phone = document.getElementById('phone').value.trim();
   const email = document.getElementById('email').value.trim();
   const address = document.getElementById('address').value.trim();
   const payment = document.getElementById('payment').value;
   const errEl = document.getElementById('checkoutError');
-  errEl.style.display = 'none';
-  errEl.textContent = '';
+  if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
 
   if (!name || !phone || !email || !address) {
-    errEl.style.display = 'block';
-    errEl.textContent = 'Proszę uzupełnić wszystkie wymagane pola formularza.';
+    if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'Proszę uzupełnić wszystkie wymagane pola formularza.'; }
     return;
   }
   if (cart.length === 0) {
-    errEl.style.display = 'block';
-    errEl.textContent = 'Koszyk jest pusty. Dodaj produkty zanim wyślesz zamówienie.';
+    if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'Koszyk jest pusty. Dodaj produkty zanim wyślesz zamówienie.'; }
     return;
   }
 
-  // Skompletuj dane zamówienia
-  const order = {
-    customer_name: name,
-    phone,
-    email,
-    address,
-    payment_method: payment,
-    items: cart.map(i => ({ id: i.id, name: i.name, price: Number(i.price || 0), quantity: i.quantity })),
-    total: cart.reduce((s,i)=>s + (Number(i.price||0)*i.quantity), 0),
-    created_at: new Date().toISOString()
-  };
+  const itemsText = cart.map(i => `${i.name} x${i.quantity} - ${formatPrice(Number(i.price||0)*i.quantity)} zł`).join('\n');
+  const totalPrice = formatPrice(cart.reduce((s,i)=>s + (Number(i.price||0)*i.quantity),0));
 
-  // Próba wysłania do Supabase (jeśli klucz pozwala). Jeśli nie, wyświetlamy informację.
-  if (supabase) {
-    try {
-      const { data, error } = await supabase.from('orders').insert([{ payload: order }]).select();
-      if (error) {
-        console.warn('Błąd zapisu zamówienia (może brak uprawnień):', error);
-        // Nie przerywamy UX - pokazujemy potwierdzenie lokalne i czyscimy koszyk
-        alert('Zamówienie złożone lokalnie. Zapis w bazie nie powiódł się (brak uprawnień).');
-      } else {
-        alert('Zamówienie wysłane! Dziękujemy — zapisano w bazie.');
-      }
-    } catch (e) {
-      console.error('checkout exception:', e);
-      alert('Zamówienie wysłane lokalnie. Wystąpił problem z zapisem do bazy.');
-    }
-  } else {
-    // fallback: brak supabase - tylko lokalne potwierdzenie
-    alert('Zamówienie wysłane lokalnie. Aby zapisać zamówienia w bazie, ustaw SUPABASE_KEY w script.js.');
+  try {
+    await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+      name, phone, email, address, payment,
+      items: itemsText,
+      total: totalPrice
+    }, EMAILJS_PUBLIC_KEY);
+
+    alert('Zamówienie wysłane emailem do sprzedawcy!');
+  } catch(e) {
+    console.error('EmailJS error:', e);
+    alert('Wystąpił błąd podczas wysyłania zamówienia emailem.');
   }
 
-  // wyczyść koszyk i formularz
   cart = [];
   updateCart();
   document.getElementById('cartForm').classList.add('hidden');
-  // opcjonalnie wyczyść pola
   ['name','phone','email','address'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
 }
 
@@ -282,7 +249,6 @@ async function checkout() {
 function showNewsletter() {
   const popup = document.getElementById('newsletterPopup');
   if (localStorage.getItem('newsletterClosed') !== 'true') {
-    // delay show to be less in-your-face
     setTimeout(() => {
       popup.classList.remove('hidden');
       popup.style.display = 'flex';
@@ -294,7 +260,6 @@ function closeNewsletter() { localStorage.setItem('newsletterClosed','true'); co
 function subscribeNewsletter() {
   const email = document.getElementById('newsletterEmail').value.trim();
   if (!email || !validateEmail(email)) { alert('Wprowadź poprawny adres email.'); return; }
-  // Tutaj możesz wywołać EmailJS lub zapisywać do Supabase (jeśli masz tabelę newsletter).
   alert('Zapisano do newslettera!');
   closeNewsletter();
 }
@@ -302,9 +267,7 @@ function subscribeNewsletter() {
 // -----------------------------
 // Cookies
 // -----------------------------
-function acceptCookies() { localStorage.setItem('cookiesAccepted','true'); document.getElementById('cookieBanner').style.display='none'; // show newsletter after delay
-  setTimeout(showNewsletter, 5000);
-}
+function acceptCookies() { localStorage.setItem('cookiesAccepted','true'); document.getElementById('cookieBanner').style.display='none'; setTimeout(showNewsletter, 5000);}
 function declineCookies() { localStorage.setItem('cookiesAccepted','false'); document.getElementById('cookieBanner').style.display='none'; }
 
 // -----------------------------
@@ -330,23 +293,7 @@ function loadBestsellers() {
 // -----------------------------
 // Pomocnicze
 // -----------------------------
-function formatPrice(num) {
-  const n = Number(num || 0);
-  return n.toFixed(2);
-}
-function escapeHtml(text){
-  if (text === null || text === undefined) return '';
-  return String(text).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[m]);
-}
-function toggleMenu(){
-  const nav = document.querySelector('nav');
-  nav.classList.toggle('show');
-  const expanded = nav.classList.contains('show');
-  document.querySelector('.menu-toggle').setAttribute('aria-expanded', String(expanded));
-}
-
-// prosta walidacja email
-function validateEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
-}
+function formatPrice(num) { const n = Number(num || 0); return n.toFixed(2); }
+function escapeHtml(text){ if (text===null||text===undefined) return ''; return String(text).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[m]); }
+function toggleMenu(){ const nav = document.querySelector('nav'); nav.classList.toggle('show'); const expanded = nav.classList.contains('show'); document.querySelector('.menu-toggle').setAttribute('aria-expanded', String(expanded)); }
+function validateEmail(email) { const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; return re.test(email); }

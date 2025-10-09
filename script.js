@@ -173,6 +173,12 @@ function addToCart() {
   updateCart();
   closeModal();
 }
+
+function removeFromCart(id) {
+  cart = cart.filter(item => item.id !== id);
+  updateCart();
+}
+
 function updateCart() {
   const list = document.getElementById('cartItems');
   list.innerHTML = '';
@@ -182,7 +188,10 @@ function updateCart() {
   } else {
     cart.forEach(item => {
       const li = document.createElement('li');
-      li.textContent = `${item.name} x${item.quantity} - ${formatPrice(Number(item.price || 0) * item.quantity)} zł`;
+      li.innerHTML = `
+        ${item.name} x${item.quantity} - ${formatPrice(Number(item.price || 0) * item.quantity)} zł
+        <button class="remove-btn" onclick="removeFromCart('${item.id}')">Usuń</button>
+      `;
       list.appendChild(li);
       total += (Number(item.price || 0) * item.quantity);
     });
@@ -190,6 +199,7 @@ function updateCart() {
   document.getElementById('cartTotal').textContent = `Łącznie: ${formatPrice(total)} zł`;
   document.getElementById('cartCount').textContent = cart.reduce((a,b)=>a+(b.quantity||0),0);
 }
+
 function toggleCart() { 
   cartVisible = !cartVisible; 
   const c = document.getElementById('cart'); 

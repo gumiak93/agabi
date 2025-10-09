@@ -189,14 +189,38 @@ function updateCart() {
   } else {
     cart.forEach(item => {
       const li = document.createElement('li');
-      li.innerHTML = `${item.name} x${item.quantity} - ${formatPrice(Number(item.price || 0) * item.quantity)} zł`;
       
+      // Nazwa i cena
+      const textSpan = document.createElement('span');
+      textSpan.textContent = `${item.name} x`;
+
+      // Pole zmiany ilości
+      const qtyInput = document.createElement('input');
+      qtyInput.type = 'number';
+      qtyInput.min = 1;
+      qtyInput.value = item.quantity;
+      qtyInput.style.width = '40px';
+      qtyInput.addEventListener('change', () => {
+        const newQty = parseInt(qtyInput.value) || 1;
+        item.quantity = newQty;
+        updateCart();
+      });
+
+      const priceSpan = document.createElement('span');
+      priceSpan.textContent = ` - ${formatPrice(Number(item.price || 0) * item.quantity)} zł `;
+
+      // Przycisk usuń
       const removeBtn = document.createElement('button');
       removeBtn.textContent = 'Usuń';
       removeBtn.className = 'remove-btn';
       removeBtn.addEventListener('click', () => removeFromCart(item.id));
 
+      // Składanie elementów w li
+      li.appendChild(textSpan);
+      li.appendChild(qtyInput);
+      li.appendChild(priceSpan);
       li.appendChild(removeBtn);
+
       list.appendChild(li);
 
       total += (Number(item.price || 0) * item.quantity);
@@ -205,6 +229,7 @@ function updateCart() {
   document.getElementById('cartTotal').textContent = `Łącznie: ${formatPrice(total)} zł`;
   document.getElementById('cartCount').textContent = cart.reduce((a,b)=>a+(b.quantity||0),0);
 }
+
 
 
 function toggleCart() { 

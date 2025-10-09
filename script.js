@@ -189,12 +189,17 @@ function updateCart() {
   } else {
     cart.forEach(item => {
       const li = document.createElement('li');
-      
-      // Nazwa i cena
+
+      // 🔹 Miniaturka
+      const img = document.createElement('img');
+      img.src = item.image || item.image2 || 'images/placeholder.jpg';
+      img.alt = item.name || 'Produkt';
+
+      // 🔹 Nazwa i cena
       const textSpan = document.createElement('span');
       textSpan.textContent = `${item.name} x`;
 
-      // Pole zmiany ilości
+      // 🔹 Pole zmiany ilości
       const qtyInput = document.createElement('input');
       qtyInput.type = 'number';
       qtyInput.min = 1;
@@ -209,13 +214,14 @@ function updateCart() {
       const priceSpan = document.createElement('span');
       priceSpan.textContent = ` - ${formatPrice(Number(item.price || 0) * item.quantity)} zł `;
 
-      // Przycisk usuń
+      // 🔹 Przycisk usuń
       const removeBtn = document.createElement('button');
       removeBtn.textContent = 'Usuń';
       removeBtn.className = 'remove-btn';
       removeBtn.addEventListener('click', () => removeFromCart(item.id));
 
-      // Składanie elementów w li
+      // 🔹 Składanie elementów w li
+      li.appendChild(img);
       li.appendChild(textSpan);
       li.appendChild(qtyInput);
       li.appendChild(priceSpan);
@@ -229,6 +235,7 @@ function updateCart() {
   document.getElementById('cartTotal').textContent = `Łącznie: ${formatPrice(total)} zł`;
   document.getElementById('cartCount').textContent = cart.reduce((a,b)=>a+(b.quantity||0),0);
 }
+
 
 
 

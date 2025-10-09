@@ -176,6 +176,20 @@ nav button:hover { transform:scale(1.05); color:#fff0f0; animation: pulse 0.6s e
 
 .cart li span { flex:1; text-align:left; }
 
+/* 🔹 Koszyk – miniaturki */
+.cart li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.cart li img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+}
 /* przycisk z ikoną kosza */
 .cart li button.remove-btn { 
   flex-shrink:0; 

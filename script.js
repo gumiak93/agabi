@@ -1,5 +1,5 @@
 // -----------------------------
-// script.js - ulepszona wersja z EmailJS
+// script.js - ulepszona wersja z EmailJS + animacje przy scrollu
 // -----------------------------
 
 // 🔹 Supabase
@@ -40,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(showNewsletter, 5000);
   } else {
     cookieBanner.classList.add('show');
-
     cookieBanner.style.pointerEvents = 'auto';
   }
 
@@ -69,6 +68,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   updateCart();
+  revealOnScroll();
+  window.addEventListener('scroll', revealOnScroll);
 });
 
 // -----------------------------
@@ -139,6 +140,7 @@ function loadProducts(cat) {
     div.addEventListener('click', () => showProductDetail(p));
     container.appendChild(div);
   });
+  revealOnScroll();
 }
 
 // -----------------------------
@@ -222,18 +224,15 @@ async function checkout() {
     return;
   }
 
-  
-  // Przygotowanie treści maila z produktami w formacie HTML
-const itemsText = '<ul>' + cart.map(i => `<li>${i.name} x${i.quantity} - ${formatPrice(Number(i.price||0)*i.quantity)} zł</li>`).join('') + '</ul>';
-const totalPrice = formatPrice(cart.reduce((s,i)=>s + (Number(i.price||0)*i.quantity),0));
+  const itemsText = '<ul>' + cart.map(i => `<li>${i.name} x${i.quantity} - ${formatPrice(Number(i.price||0)*i.quantity)} zł</li>`).join('') + '</ul>';
+  const totalPrice = formatPrice(cart.reduce((s,i)=>s + (Number(i.price||0)*i.quantity),0));
 
-try {
-  await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
-    name, phone, email, address, payment,
-    items: itemsText,
-    total: totalPrice
-  }, EMAILJS_PUBLIC_KEY);
-
+  try {
+    await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+      name, phone, email, address, payment,
+      items: itemsText,
+      total: totalPrice
+    }, EMAILJS_PUBLIC_KEY);
 
     alert('Zamówienie wysłane emailem do sprzedawcy!');
   } catch(e) {
@@ -275,7 +274,7 @@ function acceptCookies() {
   localStorage.setItem('cookiesAccepted','true'); 
   const banner = document.getElementById('cookieBanner');
   banner.classList.remove('show');
-  setTimeout(() => banner.style.display = 'none', 600); // po animacji
+  setTimeout(() => banner.style.display = 'none', 600);
   setTimeout(showNewsletter, 5000);
 }
 
@@ -285,7 +284,6 @@ function declineCookies() {
   banner.classList.remove('show');
   setTimeout(() => banner.style.display = 'none', 600);
 }
-
 
 // -----------------------------
 // Bestsellery
@@ -304,6 +302,19 @@ function loadBestsellers() {
     `;
     div.addEventListener('click',()=>showProductDetail(p));
     container.appendChild(div);
+  });
+  revealOnScroll();
+}
+
+// -----------------------------
+// Animacje przy scrollu
+// -----------------------------
+function revealOnScroll() {
+  const elements = document.querySelectorAll('.product-card, .bestseller-item');
+  const windowHeight = window.innerHeight;
+  elements.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < windowHeight - 100) el.classList.add('visible');
   });
 }
 

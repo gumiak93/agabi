@@ -123,7 +123,7 @@ function addToCart() {
   else cart.push({ id: currentProduct.id, name: currentProduct.name, price: itemPrice, quantity: qty });
   updateCart();
   closeModal();
-  openCart();
+  openCart(); // ✅ tylko po dodaniu produktu, nie przy zamykaniu newslettera
 }
 
 function updateCart() {
@@ -231,7 +231,7 @@ function declineCookies() { localStorage.setItem('cookiesAccepted', 'false'); do
 // 🔹 Menu mobilne
 function toggleMenu() { document.querySelector('nav').classList.toggle('show'); }
 
-// 🔹 Newsletter (poprawione)
+// 🔹 Newsletter
 function closeNewsletter() { 
   localStorage.setItem('newsletterClosed', 'true'); 
   const popup = document.getElementById('newsletterPopup');

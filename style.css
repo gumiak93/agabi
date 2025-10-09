@@ -29,7 +29,7 @@ html { scroll-behavior: smooth; }
   background: url('images/swieczka.gif') center/cover no-repeat;
   z-index: 1;
   filter: brightness(0.7);
-  background-attachment: fixed; /* parallax effect */
+  background-attachment: fixed;
 }
 .home-background::after {
   content:"";
@@ -68,7 +68,7 @@ html { scroll-behavior: smooth; }
 
 /* 🔹 Header */
 header { 
-  background: linear-gradient(90deg, #ffb6b9, #ff7a7f); /* premium look gradient */
+  background: linear-gradient(90deg, #ffb6b9, #ff7a7f);
   padding:10px 20px; display:flex; justify-content:space-between; align-items:center; 
   position:sticky; top:0; z-index:1000; 
 }
@@ -92,14 +92,20 @@ nav button:hover { transform:scale(1.05); color:#fff0f0; animation: pulse 0.6s e
 .product-card img { width:100%; border-radius:10px; }
 
 /* 🔹 Bestsellery */
-.bestsellers-wrapper { overflow:hidden; width:100%; margin:20px 0; padding:0 20px; }
-.bestsellers { display:flex; gap:20px; }
+.bestsellers-wrapper { overflow:hidden; width:100%; margin:20px 0; padding:0 20px; position:relative; }
+.bestsellers { display:flex; gap:20px; animation: scrollBestsellers 25s linear infinite; }
 .bestseller-item { flex:0 0 180px; background:white; border-radius:15px; padding:10px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.1); position:relative; cursor:pointer; opacity:0; transform:translateY(20px); transition:0.6s ease; }
 .bestseller-item.visible { opacity:1; transform:translateY(0); }
 .bestseller-item img { width:100%; height:150px; object-fit:cover; border-radius:10px; }
 .bestseller-label { position:absolute; top:10px; left:10px; background:#ff5a5f; color:white; padding:2px 6px; font-size:12px; border-radius:5px; font-weight:bold; }
 .bestseller-name { margin-top:8px; font-weight:bold; font-size:14px; }
 .bestseller-price { margin-top:4px; font-size:13px; color:#333; }
+
+/* 🔹 Animacja marquee bestsellerów */
+@keyframes scrollBestsellers {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
 
 /* 🔹 Animacje */
 @keyframes pulse {
@@ -195,7 +201,6 @@ footer { background:#ffb6b9; color:white; padding:10px; text-align:center; }
   transform: translateY(20px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
-
 .product-card.visible,
 .bestseller-item.visible {
   opacity: 1;

@@ -286,8 +286,10 @@ function declineCookies() {
 }
 
 // -----------------------------
-// Bestsellery
+// script.js - dodano marquee bestsellerów
 // -----------------------------
+
+// 🔹 Bestsellery
 function loadBestsellers() {
   const container = document.getElementById('bestsellers');
   container.innerHTML = '';
@@ -305,6 +307,20 @@ function loadBestsellers() {
   });
   revealOnScroll();
 }
+
+// 🔹 Animacje przy scrollu
+function revealOnScroll() {
+  const elements = document.querySelectorAll('.product-card, .bestseller-item');
+  const windowHeight = window.innerHeight;
+  elements.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < windowHeight - 100) el.classList.add('visible');
+  });
+}
+
+window.addEventListener('scroll', revealOnScroll);
+window.addEventListener('load', revealOnScroll);
+
 
 // -----------------------------
 // Animacje przy scrollu
